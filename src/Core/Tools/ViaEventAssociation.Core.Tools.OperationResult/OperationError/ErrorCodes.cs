@@ -23,7 +23,8 @@ public enum ErrorCode
     [Description("The server is currently unable to handle the request due to a temporary overloading or maintenance.")]
     ServiceUnavailable,
     [Description("The request timed out due to server taking too long to respond.")]
-    Timeout
+    Timeout,
+    Undefined
 }
 
 public static class ErrorCodeExtensions
