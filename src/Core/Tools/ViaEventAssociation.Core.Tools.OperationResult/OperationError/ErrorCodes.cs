@@ -28,19 +28,21 @@ public enum ErrorCode
 
 public static class ErrorCodeExtensions
 {
-    public static string GetDescription(this ErrorCode value)
+    public static string GetDescription(this Enum value)
     {
         FieldInfo? fi = value.GetType().GetField(value.ToString());
 
-        DescriptionAttribute[] attributes =
-            (DescriptionAttribute[])fi.GetCustomAttributes(
-                typeof(DescriptionAttribute),
-                false);
+        if (fi is null) return value.ToString(); 
 
-        if (attributes != null && attributes.Length > 0)
+        var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+        if (attributes.Length > 0)
+        {
             return attributes[0].Description;
-        else
-            return value.ToString();
+        }
+        
+        return value.ToString();
     }
+
 }
 

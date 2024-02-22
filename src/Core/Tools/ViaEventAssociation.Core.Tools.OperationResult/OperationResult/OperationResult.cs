@@ -22,7 +22,7 @@ public class OperationResult<T>
     // Static factory methods
     public static OperationResult<T> SuccessWithPayload(T payload) => new(payload, true);
     public static OperationResult<T> Failure(List<OperationError> operationErrors) => new(operationErrors);
-    public static OperationResult<T> SuccessWithoutPayload() => new(default(T), false);
+    public static OperationResult<T> SuccessWithoutPayload() => new(default(T)!, false);
 
     // Implicit conversions 
     public static implicit operator OperationResult<T>(T payload) => SuccessWithPayload(payload);
