@@ -1,14 +1,16 @@
-﻿namespace ViaEventAssociation.Core.Tools.OperationResult.OperationError;
-public class OperationError
+﻿namespace ViaEventAssociation.Core.Tools.OperationResult.OperationError
 {
-    public ErrorCode Code { get; }
-    public string Message => Code.GetMessage();
-    public string? Type { get; } 
-
-    public OperationError(ErrorCode code, string? type = null)
+    public class OperationError
     {
-        Code = code;
-        Type = type;
+        public ErrorCode Code { get; }
+        public string Message { get; private set; }
+        public string? Type { get; }
+
+        public OperationError(ErrorCode code, string specificMessage = null, string? type = null)
+        {
+            Code = code;
+            Type = type;
+            Message = specificMessage ?? code.GetDescription();
+        }
     }
 }
-

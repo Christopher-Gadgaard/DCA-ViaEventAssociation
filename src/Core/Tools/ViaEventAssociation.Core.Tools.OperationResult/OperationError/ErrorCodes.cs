@@ -1,35 +1,46 @@
-﻿namespace ViaEventAssociation.Core.Tools.OperationResult.OperationError;
+﻿using System.ComponentModel;
+using System.Reflection;
+namespace ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 
 public enum ErrorCode
 {
+    [Description("Input data cannot be null or empty.")]
     InvalidInput,
+    [Description("Data processing failed due to an internal error.")]
     ProcessingFailed,
+    [Description("The requested resource was not found.")]
     NotFound,
+    [Description("Access denied due to invalid credentials.")]
     UnauthorizedAccess,
+    [Description("You do not have permission to access the requested resource.")]
     Forbidden,
+    [Description("The request could not be completed due to a conflict with the current state of the resource.")]
     Conflict,
+    [Description("The request could not be understood by the server due to malformed syntax.")]
     BadRequest,
+    [Description("The server encountered an unexpected condition which prevented it from fulfilling the request.")]
     InternalServerError,
+    [Description("The server is currently unable to handle the request due to a temporary overloading or maintenance.")]
     ServiceUnavailable,
+    [Description("The request timed out due to server taking too long to respond.")]
     Timeout
 }
+
 public static class ErrorCodeExtensions
 {
-    public static string GetMessage(this ErrorCode errorCode)
+    public static string GetDescription(this ErrorCode value)
     {
-        return errorCode switch
-        {
-            ErrorCode.InvalidInput => "Input data cannot be null or empty.",
-            ErrorCode.ProcessingFailed => "Data processing failed due to an internal error.",
-            ErrorCode.NotFound => "The requested resource was not found.",
-            ErrorCode.UnauthorizedAccess => "Access denied due to invalid credentials.",
-            ErrorCode.Forbidden => "You do not have permission to access the requested resource.",
-            ErrorCode.Conflict => "The request could not be completed due to a conflict with the current state of the resource.",
-            ErrorCode.BadRequest => "The request could not be understood by the server due to malformed syntax.",
-            ErrorCode.InternalServerError => "The server encountered an unexpected condition which prevented it from fulfilling the request.",
-            ErrorCode.ServiceUnavailable => "The server is currently unable to handle the request due to a temporary overloading or maintenance.",
-            ErrorCode.Timeout => "The request timed out due to server taking too long to respond.",
-            _ => "An unknown error occurred."
-        };
+        FieldInfo? fi = value.GetType().GetField(value.ToString());
+
+        DescriptionAttribute[] attributes =
+            (DescriptionAttribute[])fi.GetCustomAttributes(
+                typeof(DescriptionAttribute),
+                false);
+
+        if (attributes != null && attributes.Length > 0)
+            return attributes[0].Description;
+        else
+            return value.ToString();
     }
 }
+
