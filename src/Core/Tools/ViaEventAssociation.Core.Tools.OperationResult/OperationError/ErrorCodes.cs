@@ -28,11 +28,11 @@ public enum ErrorCode
 
 public static class ErrorCodeExtensions
 {
-    public static string GetDescription(this Enum value)
+    public static string GetDescription(this ErrorCode errorCode)
     {
-        FieldInfo? fi = value.GetType().GetField(value.ToString());
+        FieldInfo? fi = errorCode.GetType().GetField(errorCode.ToString());
 
-        if (fi is null) return value.ToString(); 
+        if (fi is null) return errorCode.ToString(); 
 
         var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
@@ -41,7 +41,7 @@ public static class ErrorCodeExtensions
             return attributes[0].Description;
         }
         
-        return value.ToString();
+        return errorCode.ToString();
     }
 
 }
