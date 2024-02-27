@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "Tests\UnitTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functional Tests", "Tests\Functional Tests\Functional Tests.csproj", "{199892BE-4FEA-4C4D-8440-D76DC5648F9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Via.EventAssociation.Core.Domain", "src\Core\Via.EventAssociation.Core.Domain\Via.EventAssociation.Core.Domain.csproj", "{5B8A7CFD-8321-4F4B-A53B-1FD3C7972C29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,7 @@ Global
 		{1E85F63C-9D47-4837-A9E2-C814810655C8} = {59F65EBB-3132-47C9-8885-BA8514D2A473}
 		{DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA} = {C3D1EB23-BCE7-494D-B98C-11EF34E54E24}
 		{199892BE-4FEA-4C4D-8440-D76DC5648F9F} = {C3D1EB23-BCE7-494D-B98C-11EF34E54E24}
+		{5B8A7CFD-8321-4F4B-A53B-1FD3C7972C29} = {050AA275-A80C-4005-95CC-BFE78A493EDF}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D809EAFE-5643-49EA-94C3-D4CB4285AB63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -48,5 +51,9 @@ Global
 		{199892BE-4FEA-4C4D-8440-D76DC5648F9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{199892BE-4FEA-4C4D-8440-D76DC5648F9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{199892BE-4FEA-4C4D-8440-D76DC5648F9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B8A7CFD-8321-4F4B-A53B-1FD3C7972C29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B8A7CFD-8321-4F4B-A53B-1FD3C7972C29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B8A7CFD-8321-4F4B-A53B-1FD3C7972C29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B8A7CFD-8321-4F4B-A53B-1FD3C7972C29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
