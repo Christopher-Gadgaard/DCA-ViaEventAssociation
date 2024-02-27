@@ -1,7 +1,7 @@
 ﻿using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace UnitTests;
+namespace UnitTests.OperationResultTests;
 
 public class OperationResultTests
 {
@@ -96,13 +96,12 @@ public class OperationResultTests
         // Assert
         Assert.Equal(type, operationError.Type);
     }
-
-    // Assuming you add a new ErrorCode without a Description attribute for this test
+    
     [Fact]
     public void GetDescription_WithoutDescriptionAttribute_ReturnsEnumName()
     {
         // Arrange
-        var errorCode = ErrorCode.Undefined; // Assume Undefined is an ErrorCode without a Description attribute
+        var errorCode = ErrorCode.Undefined; 
 
         // Act
         var description = errorCode.GetDescription();
@@ -119,7 +118,7 @@ public class OperationResultTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.Null(result.Payload); // Assuming default(T) for a reference type is null
+        Assert.Null(result.Payload); 
     }
 
     [Fact]
@@ -129,7 +128,7 @@ public class OperationResultTests
         var payload = "TestData";
 
         // Act
-        OperationResult<string> result = payload; // Implicit conversion
+        OperationResult<string> result = payload; 
 
         // Assert
         Assert.True(result.IsSuccess);

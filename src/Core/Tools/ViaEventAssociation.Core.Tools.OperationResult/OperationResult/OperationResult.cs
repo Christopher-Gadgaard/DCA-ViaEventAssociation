@@ -2,7 +2,7 @@
 using OperationError;
 public class OperationResult<T>
 {
-    public T Payload { get; private set; } = default!;
+    public T Payload { get; } = default!;
     public List<OperationError> OperationErrors { get; } = new();
     public bool IsSuccess => !OperationErrors.Any();
 
@@ -32,7 +32,6 @@ public class OperationResult<T>
     public static OperationResult<T> Combine(params OperationResult<T>[] results)
     {
         var combinedOperationErrors = results.SelectMany(result => result.OperationErrors).ToList();
-        // Assuming T can be nullable, we filter out results where Payload is not default(T)
         var payloadResults = results.Where(result => !Equals(result.Payload, default(T))).ToList();
 
         if (combinedOperationErrors.Any())
@@ -41,7 +40,6 @@ public class OperationResult<T>
         }
         if (payloadResults.Any())
         {
-            // We take the first non-default payload as the result
             return new OperationResult<T>(payloadResults.First().Payload);
         }
         return SuccessWithoutPayload();
