@@ -7,13 +7,13 @@ public class OperationResult<T>
     public bool IsSuccess => !OperationErrors.Any();
 
     // Constructors
-    private OperationResult(T payload)
+    protected OperationResult(T payload)
     {
         Payload = payload;
     }
 
 
-    private OperationResult(List<OperationError> operationErrors)
+    protected OperationResult(List<OperationError> operationErrors)
     {
         OperationErrors = operationErrors ?? new List<OperationError>();
     }
@@ -27,7 +27,7 @@ public class OperationResult<T>
     // Implicit conversions 
     public static implicit operator OperationResult<T>(T payload) => SuccessWithPayload(payload);
     public static implicit operator OperationResult<T>(OperationError error) => Failure(new List<OperationError> { error });
-
+    public static implicit operator OperationResult<T>(List<OperationError> errors) => Failure(errors);
     // Helper method to combine multiple results into a single result with or without payload
     public static OperationResult<T> Combine(params OperationResult<T>[] results)
     {
