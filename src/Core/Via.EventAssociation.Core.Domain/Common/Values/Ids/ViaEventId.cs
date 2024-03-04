@@ -11,7 +11,7 @@ public class ViaEventId : ViaId
 
     public static OperationResult<ViaEventId> Create()
     {
-        var id = new Guid();
+        var id = Guid.NewGuid();
         return new ViaEventId(id);
     }
 
