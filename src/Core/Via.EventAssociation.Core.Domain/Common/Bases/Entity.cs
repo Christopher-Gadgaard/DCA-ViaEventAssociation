@@ -2,7 +2,7 @@
 
 public abstract class Entity<TViaId>
 {
-    public TViaId Id { get; }
+    public TViaId Id { get; protected set; }
 
     protected Entity(TViaId id)
     {
