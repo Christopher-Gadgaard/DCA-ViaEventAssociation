@@ -2,13 +2,11 @@
 
 namespace Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
-public class ViaEventId
+public class ViaEventId : ViaId
 {
-    public Guid Value { get; private init; }
-
-    private ViaEventId(Guid value)
+    private ViaEventId(Guid value) : base(value)
     {
-        Value = value;
+        
     }
 
     public static OperationResult<ViaEventId> Create()
@@ -16,4 +14,6 @@ public class ViaEventId
         var id = new Guid();
         return new ViaEventId(id);
     }
+
+    
 }
