@@ -11,22 +11,32 @@ public class ViaLocationName:ValueObject
     public ViaLocationName(string value)
     {
         Value = value;
-        Validate();
+        Validate(value);
     }
 
-    private OperationResult<string> Validate()
+    public static OperationResult<ViaLocationName> Create(string locationName)
     {
-        if (string.IsNullOrWhiteSpace(Value))
+        var validation = Validate(locationName);
+        if (validation.IsSuccess)
+        {
+            return new ViaLocationName(locationName);
+        }
+
+        return validation.OperationErrors;
+    }
+    private static OperationResult<string> Validate( string locationName)
+    {
+        if (string.IsNullOrWhiteSpace(locationName))
         {
             return new OperationError(ErrorCode.InvalidInput, "Location name cannot be null or empty.");
         }
 
-        if (Value.Length < 3 || Value.Length > 75)
+        if (locationName.Length < 3 || locationName.Length > 75)
         {
             return new OperationError(ErrorCode.InvalidInput, "Location name must be between 3 and 75 characters.");
         }
 
-        return Value;
+        return OperationResult<string>.SuccessWithPayload((locationName));
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

@@ -11,19 +11,29 @@ public class ViaLocationCapacity :ValueObject
     public ViaLocationCapacity(int value)
     {
         Value = value;
-        Validate();
+        Validate(value);
     }
-    public OperationResult<int> Validate()
+    
+    public static OperationResult<ViaLocationCapacity> Create(int capacity)
     {
-        if (Value < 0)
+        var validation = Validate(capacity);
+        if (validation.IsSuccess)
         {
-            return new OperationError(ErrorCode.InvalidInput, "Location capacity cannot be negative.");
+            return new ViaLocationCapacity(capacity);
         }
-        if(Value > 100)
+        return validation.OperationErrors;
+    }
+    public static OperationResult<int> Validate(int capacity)
+    {
+        if (capacity <=0)
+        {
+            return new OperationError(ErrorCode.InvalidInput, "Location capacity cannot be negative or zero.");
+        }
+        if(capacity > 100)
         {
             return new OperationError(ErrorCode.InvalidInput, "Location capacity cannot be greater than 100.");
         }
-        return Value;
+        return OperationResult<int>.SuccessWithPayload(capacity);
     }
 
 

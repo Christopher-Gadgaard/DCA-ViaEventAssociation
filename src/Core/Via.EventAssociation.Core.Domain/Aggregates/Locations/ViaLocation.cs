@@ -9,6 +9,17 @@ public class ViaLocation:AggregateRoot<ViaId>
     public ViaLocationName ViaLocationName { get; private init; }
     public ViaLocationCapacity ViaLocationCapacity { get; private init; }
 
+    public ViaLocation()
+    {
+        
+    }
+
+    public ViaLocation(ViaLocationId locationId, ViaLocationName locationName, ViaLocationCapacity locationCapacity)
+    {
+        ViaLocationId = locationId;
+        ViaLocationName = locationName;
+        ViaLocationCapacity = locationCapacity;
+    }
 
     public void UpdateName(string name)
     {
