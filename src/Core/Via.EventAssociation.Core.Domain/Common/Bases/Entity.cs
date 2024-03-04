@@ -1,10 +1,10 @@
 ﻿namespace Via.EventAssociation.Core.Domain.Common.Bases;
 
-public abstract class Entity<ViaId>
+public abstract class Entity<TViaId>
 {
-    public ViaId Id { get; }
+    public TViaId Id { get; }
 
-    protected Entity(ViaId id)
+    protected Entity(TViaId id)
     {
         Id = id;
     }
