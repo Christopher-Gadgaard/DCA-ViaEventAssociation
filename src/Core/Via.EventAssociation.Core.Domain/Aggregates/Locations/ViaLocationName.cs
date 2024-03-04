@@ -1,9 +1,10 @@
-﻿using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
+﻿using Via.EventAssociation.Core.Domain.Common.Bases;
+using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace Via.EventAssociation.Core.Domain.Aggregates.Locations;
 
-public class ViaLocationName
+public class ViaLocationName:ValueObject
 {
     public string Value { get; private init; }
 
@@ -26,5 +27,10 @@ public class ViaLocationName
         }
 
         return Value;
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        throw new NotImplementedException();
     }
 }

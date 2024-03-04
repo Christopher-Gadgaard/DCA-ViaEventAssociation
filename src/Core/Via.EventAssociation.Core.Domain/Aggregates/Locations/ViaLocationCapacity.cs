@@ -1,9 +1,10 @@
-﻿using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
+﻿using Via.EventAssociation.Core.Domain.Common.Bases;
+using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace Via.EventAssociation.Core.Domain.Aggregates.Locations;
 
-public class ViaLocationCapacity
+public class ViaLocationCapacity :ValueObject
 {
     public int Value { get; private init; }
     
@@ -24,6 +25,10 @@ public class ViaLocationCapacity
         }
         return Value;
     }
-    
-    
+
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1,6 +1,9 @@
-﻿namespace Via.EventAssociation.Core.Domain.Aggregates.Locations;
+﻿using Via.EventAssociation.Core.Domain.Common.Bases;
+using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
-public class ViaLocation
+namespace Via.EventAssociation.Core.Domain.Aggregates.Locations;
+
+public class ViaLocation:AggregateRoot<ViaId>
 {
     public ViaLocationId ViaLocationId { get; private init; }
     public ViaLocationName ViaLocationName { get; private init; }
