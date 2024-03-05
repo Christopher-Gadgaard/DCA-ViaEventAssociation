@@ -4,7 +4,7 @@ using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace Via.EventAssociation.Core.Domain.Aggregates.Guests;
 
-public class ViaGuestName:ValueObject
+public class ViaGuestName : ValueObject
 {
     private ViaName _name { get; }
     private ViaName _lastName { get; }
@@ -29,8 +29,7 @@ public class ViaGuestName:ValueObject
         {
             return OperationResult<ViaGuestName>.Failure(lastNameResult.OperationErrors);
         }
-
-        return OperationResult<ViaGuestName>.SuccessWithPayload(new ViaGuestName(firstNameResult.Payload, lastNameResult.Payload));
+        return OperationResult<ViaGuestName>.Success(new ViaGuestName(guestName));
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

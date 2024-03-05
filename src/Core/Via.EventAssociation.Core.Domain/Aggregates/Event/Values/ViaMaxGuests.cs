@@ -30,8 +30,8 @@ public class ViaMaxGuests : ValueObject
         {
             return new OperationError(ErrorCode.InvalidInput, "Guest must be between 5 and 50 guests.");
         }
-        
-        return OperationResult<int>.SuccessWithPayload(maxGuests);
+
+        return OperationResult<int>.Success(maxGuests);
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

@@ -21,8 +21,7 @@ public class ViaEventCreationTests
 
         // Act
         var result = ViaEvent.Create(id, title, description, startDate, endDate, maxGuests);
-
-
+        
         // Assert
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Payload);

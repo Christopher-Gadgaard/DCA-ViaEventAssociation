@@ -50,7 +50,7 @@ public class OperationResultTests
         var payload = "Test Payload";
 
         // Act
-        var result = OperationResult<string>.SuccessWithPayload(payload);
+        var result = OperationResult<string>.Success(payload);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -114,11 +114,10 @@ public class OperationResultTests
     public void SuccessWithoutPayload_ReturnsSuccessWithDefaultPayload()
     {
         // Act
-        var result = OperationResult<string>.SuccessWithoutPayload();
+        var result = OperationResult.Success();
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.Null(result.Payload); 
     }
 
     [Fact]

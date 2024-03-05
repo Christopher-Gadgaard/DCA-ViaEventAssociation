@@ -33,7 +33,7 @@ public class ViaLocationCapacity :ValueObject
         {
             return new OperationError(ErrorCode.InvalidInput, "Location capacity cannot be greater than 100.");
         }
-        return OperationResult<int>.SuccessWithPayload(capacity);
+        return OperationResult<int>.Success(capacity);
     }
 
 

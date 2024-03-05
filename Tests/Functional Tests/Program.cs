@@ -8,13 +8,13 @@ abstract class Program
     static void Main(string[] args)
     {
         // Example 1: Combining Success Results with Payload
-        var result1 = OperationResult<string>.SuccessWithPayload("Payload 1");
-        var result2 = OperationResult<string>.SuccessWithPayload("Payload 2");
+        var result1 = OperationResult<string>.Success("Payload 1");
+        var result2 = OperationResult<string>.Success("Payload 2");
         var combinedResult1 = OperationResult<string>.Combine(result1, result2);
         Console.WriteLine($"Example 1: Combined Result has payload: '{combinedResult1.Payload}', Success: {combinedResult1.IsSuccess}");
 
         // Example 2: Combining Success and Failure Results
-        var successResult = OperationResult<string>.SuccessWithPayload("Payload");
+        var successResult = OperationResult<string>.Success("Payload");
         var error = new OperationError(ErrorCode.NotFound, "Item not found");
         var failureResult = OperationResult<string>.Failure(new List<OperationError> { error });
         var combinedResult2 = OperationResult<string>.Combine(successResult, failureResult);
@@ -30,13 +30,13 @@ abstract class Program
         Console.WriteLine($"Example 3: Combined Result Success: {combinedResult3.IsSuccess}, Errors: {combinedResult3.OperationErrors.Count}");
         PrintErrorDescriptions(combinedResult3);
 
-        // Example 4: Combining Without Any Payloads
-        var successWithoutPayload = OperationResult<string>.SuccessWithoutPayload();
+        /*// Example 4: Combining Without Any Payloads
+        var successWithoutPayload = OperationResult.Success();
         var serviceUnavailableError = new OperationError(ErrorCode.ServiceUnavailable, "Service unavailable");
         var serviceUnavailableResult = OperationResult<string>.Failure(new List<OperationError> { serviceUnavailableError });
         var combinedResult4 = OperationResult<string>.Combine(successWithoutPayload, serviceUnavailableResult);
         Console.WriteLine($"Example 4: Combined Result Success: {combinedResult4.IsSuccess}, Errors: {combinedResult4.OperationErrors.Count}");
-        PrintErrorDescriptions(combinedResult4);
+        PrintErrorDescriptions(combinedResult4);*/
     }
 
     static void PrintErrorDescriptions(OperationResult<string> result)

@@ -1,48 +1,70 @@
 ﻿namespace ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
-using OperationError;
-public class OperationResult<T>
-{
-    public T Payload { get; } = default!;
-    public List<OperationError> OperationErrors { get; } = new();
-    public bool IsSuccess => !OperationErrors.Any();
-
-    // Constructors
-    protected OperationResult(T payload)
+using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
+    public abstract class OperationResult
     {
-        Payload = payload;
+        public List<OperationError> OperationErrors { get; protected set; } = new List<OperationError>();
+        public bool IsSuccess => !OperationErrors.Any();
+
+        public OperationResult AssertCondition(bool condition, ErrorCode errorCode)
+        {
+            if (!condition)
+            {
+                OperationErrors.Add(new OperationError(errorCode));
+            }
+            return this;
+        }
+
+        // Factory method for success without payload
+        public static OperationResult Success() => new OperationResultWithoutPayload();
+
+        // Factory method for failure
+        public static OperationResult Failure(List<OperationError> errors) => new OperationResultWithoutPayload(errors);
     }
 
-
-    protected OperationResult(List<OperationError> operationErrors)
+    // OperationResult Without Payload
+    internal class OperationResultWithoutPayload : OperationResult
     {
-        OperationErrors = operationErrors ?? new List<OperationError>();
+        internal OperationResultWithoutPayload() { }
+        internal OperationResultWithoutPayload(List<OperationError> errors) : base() { OperationErrors = errors; }
     }
 
-    // Static factory methods
-    public static OperationResult<T> SuccessWithPayload(T payload) => new(payload);
-    public static OperationResult<T> SuccessWithoutPayload() => new(default(T)!);
-    public static OperationResult<T> Failure(List<OperationError> operationErrors) => new(operationErrors);
-
-
-    // Implicit conversions 
-    public static implicit operator OperationResult<T>(T payload) => SuccessWithPayload(payload);
-    public static implicit operator OperationResult<T>(OperationError error) => Failure(new List<OperationError> { error });
-    public static implicit operator OperationResult<T>(List<OperationError> errors) => Failure(errors);
-    // Helper method to combine multiple results into a single result with or without payload
-    public static OperationResult<T> Combine(params OperationResult<T>[] results)
+    // Generic OperationResult Class
+    public class OperationResult<T> : OperationResult
     {
-        var combinedOperationErrors = results.SelectMany(result => result.OperationErrors).ToList();
-        var payloadResults = results.Where(result => !Equals(result.Payload, default(T))).ToList();
+        public T Payload { get; private set; } = default!;
 
-        if (combinedOperationErrors.Any())
+        private OperationResult(T payload)
         {
-            return new OperationResult<T>(combinedOperationErrors);
+            Payload = payload;
         }
-        if (payloadResults.Any())
+
+        private OperationResult(List<OperationError> errors) : base()
         {
-            return new OperationResult<T>(payloadResults.First().Payload);
+            OperationErrors = errors;
         }
-        return SuccessWithoutPayload();
+
+        // Factory methods
+        public static OperationResult<T> Success(T payload) => new OperationResult<T>(payload);
+        public new static OperationResult<T> Failure(List<OperationError> errors) => new OperationResult<T>(errors);
+
+        // Implicit conversions
+        public static implicit operator OperationResult<T>(T payload) => Success(payload);
+        public static implicit operator OperationResult<T>(OperationError error) => Failure(new List<OperationError> { error });
+        public static implicit operator OperationResult<T>(List<OperationError> errors) => Failure(errors);
+        
+        public static OperationResult<T> Combine(params OperationResult<T>[] results)
+        {
+            var combinedErrors = results.SelectMany(result => result.OperationErrors).ToList();
     
+            if (combinedErrors.Count != 0)
+            {
+                return new OperationResult<T>(combinedErrors);
+            }
+    
+            var payload = results.Where(result => result.IsSuccess && !Equals(result.Payload, default(T)))
+                .Select(result => result.Payload)
+                .FirstOrDefault();
+    
+            return payload != null ? Success(payload) : Success(default(T)!);
+        }
     }
-}

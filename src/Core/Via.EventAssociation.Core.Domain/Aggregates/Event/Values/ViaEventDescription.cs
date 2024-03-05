@@ -32,7 +32,7 @@ public class ViaEventDescription : ValueObject
                 $"Description cannot exceed 250 characters. {description.Length}/250");
         }
 
-        return OperationResult<string>.SuccessWithPayload(description);
+        return OperationResult<string>.Success(description);
     }
 
     protected override IEnumerable<object> GetEqualityComponents()
