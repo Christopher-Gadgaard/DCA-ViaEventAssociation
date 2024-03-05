@@ -38,8 +38,8 @@ public class ViaName : ValueObject
         {
             return OperationResult<string>.Failure(new List<OperationError> { new OperationError(ErrorCode.InvalidInput, "name format is invalid or does not meet the specific criteria.") });
         }
-       
-        return OperationResult<string>.SuccessWithPayload(name);
+
+        return OperationResult<string>.Success(name);
     }
     protected override IEnumerable<object> GetEqualityComponents()
     {

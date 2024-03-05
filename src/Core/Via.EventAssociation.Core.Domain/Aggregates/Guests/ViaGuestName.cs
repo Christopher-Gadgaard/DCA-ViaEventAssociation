@@ -29,7 +29,8 @@ public class ViaGuestName : ValueObject
         {
             return OperationResult<ViaGuestName>.Failure(lastNameResult.OperationErrors);
         }
-        return OperationResult<ViaGuestName>.Success(new ViaGuestName(guestName));
+
+        return OperationResult<ViaGuestName>.Success(new ViaGuestName(firstNameResult.Payload, lastNameResult.Payload));
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

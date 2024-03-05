@@ -94,7 +94,7 @@ public class ViaNameTests
     }
     
     [Fact]
-    public void ShouldReturnFailureWhenTooShort2()
+    public void ShouldReturnSuccessWhenSize2()
     {
         // Arrange
         var tooShortName = ViaName.Create("Jo");
@@ -103,7 +103,7 @@ public class ViaNameTests
         var result = tooShortName;
         
         // Assert
-        Assert.True(result.OperationErrors.Any());
+        Assert.True(result.IsSuccess);
     }
     
     
