@@ -33,19 +33,19 @@ using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
     {
         public T Payload { get; private set; } = default!;
 
-        protected OperationResult(T payload)
+        private OperationResult(T payload)
         {
             Payload = payload;
         }
 
-        protected OperationResult(List<OperationError> errors) : base()
+        private OperationResult(List<OperationError> errors) : base()
         {
             OperationErrors = errors;
         }
 
         // Factory methods
         public static OperationResult<T> Success(T payload) => new OperationResult<T>(payload);
-        public static new OperationResult<T> Failure(List<OperationError> errors) => new OperationResult<T>(errors);
+        public new static OperationResult<T> Failure(List<OperationError> errors) => new OperationResult<T>(errors);
 
         // Implicit conversions
         public static implicit operator OperationResult<T>(T payload) => Success(payload);
@@ -56,7 +56,7 @@ using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
         {
             var combinedErrors = results.SelectMany(result => result.OperationErrors).ToList();
     
-            if (combinedErrors.Any())
+            if (combinedErrors.Count != 0)
             {
                 return new OperationResult<T>(combinedErrors);
             }
