@@ -33,7 +33,7 @@ public class ViaGuestName:ValueObject
         {
             return OperationResult<ViaGuestName>.Failure(new List<OperationError>{new OperationError(ErrorCode.InvalidInput, "Guest name must be between 3 and 75 characters.")});
         }
-        return OperationResult<ViaGuestName>.SuccessWithPayload(new ViaGuestName(guestName));
+        return OperationResult<ViaGuestName>.Success(new ViaGuestName(guestName));
     }
   
     protected override IEnumerable<object> GetEqualityComponents()

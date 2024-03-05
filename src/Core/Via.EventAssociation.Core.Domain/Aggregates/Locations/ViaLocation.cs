@@ -34,7 +34,7 @@ public class ViaLocation : AggregateRoot<ViaId>
         if (result.IsSuccess)
         {
             this.ViaLocationName = result.Payload;
-            return OperationResult<ViaLocationName>.SuccessWithPayload(result.Payload);
+            return OperationResult<ViaLocationName>.Success(result.Payload);
         }
         else
         {
@@ -48,7 +48,7 @@ public class ViaLocation : AggregateRoot<ViaId>
         if (result.IsSuccess)
         {
             this.ViaLocationCapacity = result.Payload;
-            return OperationResult<ViaLocationCapacity>.SuccessWithPayload(result.Payload);
+            return OperationResult<ViaLocationCapacity>.Success(result.Payload);
         }
         else
         {

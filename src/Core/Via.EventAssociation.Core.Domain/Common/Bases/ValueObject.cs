@@ -7,12 +7,12 @@ public abstract class ValueObject
         if (other is null) return false;
         if (other.GetType() != GetType()) return false;
 
-        return ((ValueObject)other).GetEqualityComponents()
+        return ((ValueObject) other).GetEqualityComponents()
             .SequenceEqual(GetEqualityComponents());
     }
 
     protected abstract IEnumerable<object> GetEqualityComponents();
-    
+
     public override int GetHashCode()
     {
         return GetEqualityComponents()

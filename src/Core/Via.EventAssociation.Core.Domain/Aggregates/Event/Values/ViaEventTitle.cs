@@ -20,6 +20,7 @@ public class ViaEventTitle : ValueObject
         {
             return new ViaEventTitle(title);
         }
+
         return validation.OperationErrors;
     }
 
@@ -30,7 +31,7 @@ public class ViaEventTitle : ValueObject
             return new OperationError(ErrorCode.InvalidInput, "Title must be between 3 and 75 characters long.");
         }
 
-        return OperationResult<string>.SuccessWithPayload(title);
+        return OperationResult<string>.Success(title);
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

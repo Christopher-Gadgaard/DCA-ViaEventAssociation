@@ -8,6 +8,8 @@ public abstract class Entity<TViaId>
     {
         Id = id;
     }
-    
-    protected Entity(){}
+
+    protected Entity()
+    {
+    }
 }

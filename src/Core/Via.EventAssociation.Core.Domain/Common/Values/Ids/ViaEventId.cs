@@ -18,6 +18,6 @@ public class ViaEventId : ViaId
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        yield return Value;
+        throw new NotImplementedException();
     }
 }

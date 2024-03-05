@@ -36,7 +36,7 @@ public class ViaLocationName:ValueObject
             return new OperationError(ErrorCode.InvalidInput, "Location name must be between 3 and 75 characters.");
         }
 
-        return OperationResult<string>.SuccessWithPayload((locationName));
+        return OperationResult<string>.Success((locationName));
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

@@ -40,7 +40,7 @@ public class ViaEmail:ValueObject
             return OperationResult<string>.Failure(new List<OperationError> { new OperationError(ErrorCode.InvalidInput, "Email format is invalid or does not meet the specific criteria.") });
         }
 
-        return OperationResult<string>.SuccessWithPayload(email);
+        return OperationResult<string>.Success(email);
     }
 
 
