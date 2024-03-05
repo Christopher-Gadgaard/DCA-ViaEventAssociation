@@ -33,8 +33,7 @@ public class ViaEmail:ValueObject
             return OperationResult<string>.Failure(new List<OperationError> { new OperationError(ErrorCode.InvalidInput, "Email cannot be null or empty.") });
         }
 
-        // Adjusted regex pattern based on the specified requirements
-        var emailRegex = @"^(?:[a-zA-Z]{3,4}|\d{6})@[a-zA-Z0-9.-]+\.via\.dk$";
+        var emailRegex = @"^(?:[a-zA-Z]{3,4}|\d{6})@via.dk$";
         if (!Regex.IsMatch(email, emailRegex))
         {
             return OperationResult<string>.Failure(new List<OperationError> { new OperationError(ErrorCode.InvalidInput, "Email format is invalid or does not meet the specific criteria.") });

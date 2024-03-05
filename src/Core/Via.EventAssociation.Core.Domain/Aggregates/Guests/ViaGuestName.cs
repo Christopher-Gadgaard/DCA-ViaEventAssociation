@@ -6,38 +6,36 @@ namespace Via.EventAssociation.Core.Domain.Aggregates.Guests;
 
 public class ViaGuestName:ValueObject
 {
-    public string Value { get; private init; }
-    
-    public ViaGuestName(string value)
+    private ViaName _name { get; }
+    private ViaName _lastName { get; }
+
+    private ViaGuestName(ViaName guestFirstName, ViaName guestLastName)
     {
-        Value = value;
-      
-    }
-    public static OperationResult<ViaGuestName> Create(string guestName)
-    {
-        var validation = Validate(guestName);
-        if (validation.IsSuccess)
-        {
-            return new ViaGuestName(guestName);
-        }
-        return validation.OperationErrors;
+        _name = guestFirstName;
+        _lastName = guestLastName;
     }
 
-    private static OperationResult<ViaGuestName> Validate(string guestName)
+    public static OperationResult<ViaGuestName> Create(string guestFirstName, string guestLastName)
     {
-        if (string.IsNullOrWhiteSpace(guestName))
+        var firstNameResult = ViaName.Create(guestFirstName);
+        var lastNameResult = ViaName.Create(guestLastName);
+
+        if (!firstNameResult.IsSuccess)
         {
-            return OperationResult<ViaGuestName>.Failure(new List<OperationError> { new OperationError(ErrorCode.InvalidInput, "Guest name cannot be null or empty.") });
+            return OperationResult<ViaGuestName>.Failure(firstNameResult.OperationErrors);
         }
-        if (guestName.Length < 3 || guestName.Length > 75)
+
+        if (!lastNameResult.IsSuccess)
         {
-            return OperationResult<ViaGuestName>.Failure(new List<OperationError>{new OperationError(ErrorCode.InvalidInput, "Guest name must be between 3 and 75 characters.")});
+            return OperationResult<ViaGuestName>.Failure(lastNameResult.OperationErrors);
         }
-        return OperationResult<ViaGuestName>.SuccessWithPayload(new ViaGuestName(guestName));
+
+        return OperationResult<ViaGuestName>.SuccessWithPayload(new ViaGuestName(firstNameResult.Payload, lastNameResult.Payload));
     }
-  
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return _name;
+        yield return _lastName;
     }
 }

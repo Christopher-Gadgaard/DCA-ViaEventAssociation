@@ -9,8 +9,6 @@ public class ViaBookingIdTests
     
     public void Create_ShouldReturnSuccess()
     {
-        // Arrange
-        const int validId = 1;
         
         // Act
         var result = ViaBookingId.Create();

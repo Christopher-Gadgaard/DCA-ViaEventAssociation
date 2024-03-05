@@ -1,20 +1,19 @@
-﻿using Via.EventAssociation.Core.Domain.Aggregates.Locations;
-using Via.EventAssociation.Core.Domain.Common.Values.Ids;
+﻿using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
 namespace UnitTests.Features.Location.Values;
 
-public class ViaLocationIdTests
+public class ViaGuestIdTests
 {
     [Fact]
+    
     public void Create_ShouldReturnSuccess()
-    { 
+    {
         
         // Act
-        var result = ViaLocationId.Create();
+        var result = ViaGuestId.Create();
         
         
         // Assert
         Assert.True(result.IsSuccess);
     }
-
-} 
+}

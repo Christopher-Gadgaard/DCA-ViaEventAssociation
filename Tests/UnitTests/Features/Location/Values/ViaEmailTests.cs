@@ -6,7 +6,7 @@ public class ViaEmailTests
 {
     [Fact]
 
-    public void Create_ShouldReturnSuccess()
+    public void Create_ShouldReturnFail()
     {
         // Arrange
         var validEmail = "valid_mail@via.dk";
@@ -15,8 +15,7 @@ public class ViaEmailTests
         var result = ViaEmail.Create(validEmail);
 
         // Assert
-        Assert.True(result.IsSuccess);
-        Assert.Equal(validEmail, result.Payload.Value);
+        Assert.False(result.IsSuccess);
     }
 
     [Fact]
@@ -130,7 +129,7 @@ public class ViaEmailTests
         var result = ViaEmail.Create(invalidEmail);
 
         // Assert
-        Assert.False(result.IsSuccess);
+        Assert.True(result.OperationErrors.Any());
     }
 
     [Fact]
@@ -144,6 +143,32 @@ public class ViaEmailTests
         var result = ViaEmail.Create(invalidEmail);
 
         // Assert
-        Assert.False(result.OperationErrors.Any());
+        Assert.True(result.OperationErrors.Any());
+    }
+
+    [Fact]
+
+    public void ShouldReturnFailure_WhenEmailIsInvalid3()
+    {
+        // Arrange
+        const string invalidEmail = "308826@VIA.DK";
+        // Act
+        var result = ViaEmail.Create(invalidEmail);
+
+        // Assert
+        Assert.True(result.OperationErrors.Any());
+    }
+
+    [Fact]
+    public void ShouldReturnSuccess_OnCapitalLetters()
+    {
+        // Arrange
+        const string validEmail = "VLAD@via.dk";
+
+        // Act
+        var result = ViaEmail.Create(validEmail);
+
+        // Assert
+        Assert.True(result.IsSuccess);
     }
 }
