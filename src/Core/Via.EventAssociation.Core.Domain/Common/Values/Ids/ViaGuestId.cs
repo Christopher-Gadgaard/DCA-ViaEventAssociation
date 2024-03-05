@@ -2,9 +2,19 @@
 
 namespace Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
-public class ViaGuestId :ValueObject
+public class ViaGuestId :ViaId
 {
-    public Guid Value { get; private init; }
+    
+    private ViaGuestId(Guid value):base(value)
+    {
+  
+    }
+    
+    public static ViaGuestId Create()
+    {
+        var id = Guid.NewGuid();
+        return new ViaGuestId(id);
+    }
     protected override IEnumerable<object> GetEqualityComponents()
     {
         throw new NotImplementedException();

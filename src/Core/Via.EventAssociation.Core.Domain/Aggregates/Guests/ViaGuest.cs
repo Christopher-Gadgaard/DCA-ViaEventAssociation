@@ -14,4 +14,16 @@ public class ViaGuest:AggregateRoot<ViaId>
     {
         
     }
+    public ViaGuest( ViaGuestId viaGuestId, ViaGuestName viaGuestName, ViaEmail viaEmail)
+    {
+        ViaGuestId = viaGuestId;
+        _viaGuestName = viaGuestName;
+        _viaEmail = viaEmail;
+    }
+    
+    public static ViaGuest Create(ViaGuestId viaGuestId, ViaGuestName viaGuestName, ViaEmail viaEmail)
+    {
+        return new ViaGuest(viaGuestId, viaGuestName, viaEmail);
+    }
+    
 }

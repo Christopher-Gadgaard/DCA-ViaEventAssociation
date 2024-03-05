@@ -25,4 +25,8 @@
       <ProjectReference Include="..\..\src\Core\Via.EventAssociation.Core.Domain\Via.EventAssociation.Core.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features\Guest\CreateGuest\" />
+    </ItemGroup>
+
 </Project>

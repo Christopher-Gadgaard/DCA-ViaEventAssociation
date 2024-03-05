@@ -13,11 +13,21 @@ public class ViaBooking: Entity<ViaEventId>
     private ViaEventId _viaEventId;
     
     private ViaStartDate _viaStartDate;
+    
     private ViaEndDate _viaEndDate;
 
     public ViaBooking()
     {
         
     }
+    public ViaBooking(ViaBookingId viaBookingId, ViaLocationId viaLocationId, ViaEventId viaEventId, ViaStartDate viaStartDate, ViaEndDate viaEndDate)
+    {
+        ViaBookingId = viaBookingId;
+        _viaLocationId = viaLocationId;
+        _viaEventId = viaEventId;
+        _viaStartDate = viaStartDate;
+        _viaEndDate = viaEndDate;
+    }
+    
     
 }
