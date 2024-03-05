@@ -15,5 +15,9 @@ public class ViaEventId : ViaId
         return new ViaEventId(id);
     }
 
-    
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
+    }
 }

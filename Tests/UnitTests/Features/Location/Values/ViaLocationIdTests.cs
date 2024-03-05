@@ -1,4 +1,5 @@
 ﻿using Via.EventAssociation.Core.Domain.Aggregates.Locations;
+using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
 namespace UnitTests.Features.Location.Values;
 

@@ -1,6 +1,6 @@
 ﻿using Via.EventAssociation.Core.Domain.Common.Bases;
 
-namespace Via.EventAssociation.Core.Domain.Aggregates.Guests;
+namespace Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
 public class ViaGuestId :ValueObject
 {

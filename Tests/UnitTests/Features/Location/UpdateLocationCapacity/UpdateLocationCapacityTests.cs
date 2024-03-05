@@ -1,11 +1,12 @@
 ﻿using Via.EventAssociation.Core.Domain.Aggregates.Locations;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
-namespace UnitTests.Features.Location.UpdateLocationName;
+namespace UnitTests.Features.Location.UpdateLocationCapacity;
 
-public class UpdateLocationNameTest
+public class UpdateLocationCapacityTests
 {
     [Fact]
+    
     public void Update_ShouldReturnSuccess()
     {
         // Arrange
@@ -15,13 +16,13 @@ public class UpdateLocationNameTest
         // Act
         var location = new ViaLocation(viaLocationId, viaLocationName, viaLocationCapacity);
         
-        var result = location.UpdateName("New name"); 
+        var result = location.UpdateLocationCapacity(10); 
         
         //Assert
         Assert.True(result.IsSuccess);
     }
-    
     [Fact]
+    
     public void Update_ShouldReturnSuccessWhenValid()
     {
         // Arrange
@@ -31,11 +32,12 @@ public class UpdateLocationNameTest
         // Act
         var location = new ViaLocation(viaLocationId, viaLocationName, viaLocationCapacity);
         
-        location.UpdateName("New Name"); 
+        location.UpdateLocationCapacity(10); 
         
        //Assert
-        Assert.Equal("New Name", location.ViaLocationName.Value);
+        Assert.Equal(10, location.ViaLocationCapacity.Value);
     }
+    
     [Fact]
     
     public void Update_ShouldReturnFailureWhenEmpty()
@@ -47,7 +49,7 @@ public class UpdateLocationNameTest
         // Act
         var location = new ViaLocation(viaLocationId, viaLocationName, viaLocationCapacity);
         
-        var result = location.UpdateName(""); 
+        var result = location.UpdateLocationCapacity(0); 
         
         //Assert
         Assert.True(result.OperationErrors.Any());
@@ -55,7 +57,7 @@ public class UpdateLocationNameTest
     
     [Fact]
     
-    public void Update_NameTooLongShouldFail()
+    public void Update_CapacityTooHighShouldFail()
     {
         // Arrange
         var viaLocationId = ViaLocationId.Create().Payload;
@@ -64,23 +66,7 @@ public class UpdateLocationNameTest
         // Act
         var location = new ViaLocation(viaLocationId, viaLocationName, viaLocationCapacity);
         
-        var result = location.UpdateName("New Name lorem ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley"); 
-        
-        //Assert
-        Assert.True(result.OperationErrors.Any());
-    }
-    [Fact]
-    
-    public void Update_NameTooShortShouldFail()
-    {
-        // Arrange
-        var viaLocationId = ViaLocationId.Create().Payload;
-        var viaLocationName = ViaLocationName.Create("Location Name").Payload;
-        var viaLocationCapacity = ViaLocationCapacity.Create(100).Payload;
-        // Act
-        var location = new ViaLocation(viaLocationId, viaLocationName, viaLocationCapacity);
-        
-        var result = location.UpdateName("Ne"); 
+        var result = location.UpdateLocationCapacity(101); 
         
         //Assert
         Assert.True(result.OperationErrors.Any());

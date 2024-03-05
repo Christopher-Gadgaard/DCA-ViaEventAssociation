@@ -1,16 +1,15 @@
 ﻿using Via.EventAssociation.Core.Domain.Common.Bases;
-using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace Via.EventAssociation.Core.Domain.Aggregates.Locations;
+namespace Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
-public class ViaLocationId :ValueObject
+public class ViaLocationId :ViaId
 {
-    public Guid Value { get; private init; }
+  
     
-    public ViaLocationId(Guid value)
+    public ViaLocationId(Guid value):base(value)
     {
-        Value = value;
+      
     }
     public static OperationResult<ViaLocationId> Create()
     {
@@ -20,6 +19,6 @@ public class ViaLocationId :ValueObject
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return Value;
     }
 }

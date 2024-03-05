@@ -1,6 +1,8 @@
-﻿namespace Via.EventAssociation.Core.Domain.Common.Values.Ids;
+﻿using Via.EventAssociation.Core.Domain.Common.Bases;
 
- public abstract class ViaId
+namespace Via.EventAssociation.Core.Domain.Common.Values.Ids;
+
+ public abstract class ViaId:ValueObject
 {
     public Guid Value { get; private init; }
     

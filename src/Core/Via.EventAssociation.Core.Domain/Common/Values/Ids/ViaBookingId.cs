@@ -1,23 +1,22 @@
 ﻿using Via.EventAssociation.Core.Domain.Common.Bases;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace Via.EventAssociation.Core.Domain.Aggregates.Locations;
+namespace Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
-public class ViaBookingId :ValueObject
+public class ViaBookingId :ViaId
 {
-    public Guid Value { get; private init; }
-    
-    public ViaBookingId(Guid value)
+    private ViaBookingId(Guid value) : base(value)
     {
-        Value = value;
+        
     }
     public static OperationResult<ViaBookingId> Create()
     {
-        var id = new Guid();
+        var id=Guid.NewGuid();
         return new ViaBookingId(id);
     }
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return Value;
     }
 }

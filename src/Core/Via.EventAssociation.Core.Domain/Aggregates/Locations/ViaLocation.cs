@@ -1,17 +1,17 @@
 ﻿using Via.EventAssociation.Core.Domain.Common.Bases;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
+using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace Via.EventAssociation.Core.Domain.Aggregates.Locations;
 
-public class ViaLocation:AggregateRoot<ViaId>
+public class ViaLocation : AggregateRoot<ViaId>
 {
     public ViaLocationId ViaLocationId { get; private init; }
-    public ViaLocationName ViaLocationName { get; private init; }
-    public ViaLocationCapacity ViaLocationCapacity { get; private init; }
+    public ViaLocationName ViaLocationName { get; private set; }
+    public ViaLocationCapacity ViaLocationCapacity { get; private set; }
 
     public ViaLocation()
     {
-        
     }
 
     public ViaLocation(ViaLocationId locationId, ViaLocationName locationName, ViaLocationCapacity locationCapacity)
@@ -21,13 +21,38 @@ public class ViaLocation:AggregateRoot<ViaId>
         ViaLocationCapacity = locationCapacity;
     }
 
-    public void UpdateName(string name)
+    private static OperationResult<ViaLocation> Create(ViaLocationId locationId, ViaLocationName locationName,
+        ViaLocationCapacity locationCapacity)
     {
-       new ViaLocationName(name);
+        return new ViaLocation(locationId, locationName, locationCapacity);
     }
-    public void SetLocationCapacity(int capacity)
+
+    public OperationResult<ViaLocationName> UpdateName(string name)
     {
-        new ViaLocationCapacity(capacity);
+        ViaLocationName updatedName = new ViaLocationName(name);
+        var result = ViaLocationName.Create(name);
+        if (result.IsSuccess)
+        {
+            this.ViaLocationName = result.Payload;
+            return OperationResult<ViaLocationName>.SuccessWithPayload(result.Payload);
+        }
+        else
+        {
+            return OperationResult<ViaLocationName>.Failure(result.OperationErrors);
+        }
     }
-    
+
+    public OperationResult<ViaLocationCapacity> UpdateLocationCapacity(int capacity)
+    {
+        var result = ViaLocationCapacity.Create(capacity);
+        if (result.IsSuccess)
+        {
+            this.ViaLocationCapacity = result.Payload;
+            return OperationResult<ViaLocationCapacity>.SuccessWithPayload(result.Payload);
+        }
+        else
+        {
+            return OperationResult<ViaLocationCapacity>.Failure(result.OperationErrors);
+        }
+    }
 }
