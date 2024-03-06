@@ -34,7 +34,7 @@ public class UpdateLocationNameTest
         location.UpdateName("New Name"); 
         
        //Assert
-        Assert.Equal("New Name", location.ViaLocationName.Value);
+        Assert.Equal("New Name", location.Name.Value);
     }
     [Fact]
     

@@ -35,7 +35,7 @@ public class UpdateLocationCapacityTests
         location.UpdateLocationCapacity(10); 
         
        //Assert
-        Assert.Equal(10, location.ViaLocationCapacity.Value);
+        Assert.Equal(10, location.Capacity.Value);
     }
     
     [Fact]

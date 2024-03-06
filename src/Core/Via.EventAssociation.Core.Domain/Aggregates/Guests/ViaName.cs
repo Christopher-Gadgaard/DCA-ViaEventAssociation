@@ -33,7 +33,7 @@ public class ViaName : ValueObject
             return OperationResult<string>.Failure(new List<OperationError> { new OperationError(ErrorCode.InvalidInput, "name cannot be null or empty.") });
         }
 
-        var nameRegex = "^[a-zA-Z]{2,25}$";
+        var nameRegex = "^[A-Z][a-z]{1,23}$";
         if (!Regex.IsMatch(name, nameRegex))
         {
             return OperationResult<string>.Failure(new List<OperationError> { new OperationError(ErrorCode.InvalidInput, "name format is invalid or does not meet the specific criteria.") });
