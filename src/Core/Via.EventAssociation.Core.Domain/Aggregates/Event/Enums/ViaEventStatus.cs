@@ -4,4 +4,6 @@ public enum ViaEventStatus
 {
     Draft,
     Ready,
+    Active,
+    Cancelled,
 }

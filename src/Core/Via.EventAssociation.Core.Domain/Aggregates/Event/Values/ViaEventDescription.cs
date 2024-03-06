@@ -13,7 +13,7 @@ public class ViaEventDescription : ValueObject
         Value = value;
     }
 
-    public static OperationResult<ViaEventDescription> Create(string description)
+    public static OperationResult<ViaEventDescription?> Create(string description)
     {
         var validation = Validate(description);
         if (validation.IsSuccess)

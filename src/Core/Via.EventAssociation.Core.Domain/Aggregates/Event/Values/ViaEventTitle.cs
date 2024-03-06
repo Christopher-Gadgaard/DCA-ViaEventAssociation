@@ -13,7 +13,7 @@ public class ViaEventTitle : ValueObject
         Value = value;
     }
 
-    public static OperationResult<ViaEventTitle> Create(string title)
+    public static OperationResult<ViaEventTitle?> Create(string title)
     {
         var validation = Validate(title);
         if (validation.IsSuccess)

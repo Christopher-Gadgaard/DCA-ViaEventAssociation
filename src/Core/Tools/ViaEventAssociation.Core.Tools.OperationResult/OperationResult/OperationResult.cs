@@ -2,17 +2,9 @@
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
     public abstract class OperationResult
     {
-        public List<OperationError> OperationErrors { get; protected set; } = new List<OperationError>();
-        public bool IsSuccess => !OperationErrors.Any();
-
-        public OperationResult AssertCondition(bool condition, ErrorCode errorCode)
-        {
-            if (!condition)
-            {
-                OperationErrors.Add(new OperationError(errorCode));
-            }
-            return this;
-        }
+        public List<OperationError> OperationErrors { get; protected set; } = new();
+        public bool IsSuccess => OperationErrors.Count == 0;
+        public bool IsFailure => !IsSuccess;
 
         // Factory method for success without payload
         public static OperationResult Success() => new OperationResultWithoutPayload();

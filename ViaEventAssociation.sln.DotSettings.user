@@ -107,4 +107,10 @@
     &lt;/TestAncestor&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9e52f639_002D9cb0_002D4e5d_002D9d5a_002Dd040af6dc5ec/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ViaEventCreationTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.CreateEvent.ViaEventCreationTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.UpdateTitle.ViaEventUpdateTitleTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	</wpf:ResourceDictionary>

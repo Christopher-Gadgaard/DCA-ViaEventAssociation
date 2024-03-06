@@ -1,5 +1,6 @@
 ﻿using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
+using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace UnitTests.Features.Event.Values;
 
