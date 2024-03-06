@@ -14,26 +14,26 @@
     * [x] S4
 
 
-* [ ] UC2 - Update Title
+* [x] UC2 - Update Title
     * [X] Value - ViaEventTitle
-    * [ ] S1
-    * [ ] S2
-    * [ ] F1
-    * [ ] F2
-    * [ ] F3
-    * [ ] F4
-    * [ ] F5
-    * [ ] F6
+    * [x] S1
+    * [x] S2
+    * [x] F1
+    * [x] F2
+    * [x] F3
+    * [x] F4
+    * [x] F5
+    * [x] F6
 
 
-* [ ] UC3 - Update Description
+* [x] UC3 - Update Description
     * [x] Value - ViaEventDescription
-    * [ ] S1
-    * [ ] S2
-    * [ ] S3
-    * [ ] F1
-    * [ ] F2
-    * [ ] F3
+    * [x] S1
+    * [x] S2
+    * [x] S3
+    * [x] F1
+    * [x] F2
+    * [x] F3
 
 
 * [ ] UC4 - Update Start and End Time

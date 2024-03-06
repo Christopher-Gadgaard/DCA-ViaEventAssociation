@@ -60,7 +60,6 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         ViaEventVisibility visibility = ViaEventVisibility.Private)
     {
         var viaEvent = new ViaEvent(id, title, description, dateTimeRange, maxGuests, status, visibility);
-        
         return OperationResult<ViaEvent>.Success(viaEvent);
     }
 
@@ -80,22 +79,43 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
         _title = titleUpdateResult.Payload!;
 
-        // If the event is in Ready status, revert it to Draft upon changing the title
-        if (_status == ViaEventStatus.Ready)
+        return IfReadyRevertToDraft();
+    }
+    
+    public OperationResult UpdateDescription(string newDescription)
+    {
+        var modifiableStateCheck = CheckModifiableState();
+        if (modifiableStateCheck.IsFailure)
         {
-            _status = ViaEventStatus.Draft;
+            return modifiableStateCheck;
         }
 
-        return OperationResult.Success();
+        var descriptionUpdateResult = ViaEventDescription.Create(newDescription);
+        if (descriptionUpdateResult.IsFailure)
+        {
+            return OperationResult.Failure(descriptionUpdateResult.OperationErrors);
+        }
+
+        _description = descriptionUpdateResult.Payload!;
+        
+        return IfReadyRevertToDraft();
     }
-
-
-    // Check if is in a modifiable state
+    
     private OperationResult CheckModifiableState()
     {
         return _status is ViaEventStatus.Active or ViaEventStatus.Cancelled
             ? OperationResult.Failure(new List<OperationError>
                 {new(ErrorCode.BadRequest, "The event cannot be modified in its current state.")})
             : OperationResult.Success();
+    }
+    
+    private OperationResult IfReadyRevertToDraft()
+    {
+        if (_status == ViaEventStatus.Ready)
+        {
+            _status = ViaEventStatus.Draft;
+        }
+
+        return OperationResult.Success();
     }
 }

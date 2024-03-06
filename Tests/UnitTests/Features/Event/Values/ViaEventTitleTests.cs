@@ -17,7 +17,7 @@ public class ViaEventTitleTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.Equal(validTitle, result.Payload.Value);
+        Assert.Equal(validTitle, result.Payload?.Value);
     }
 
     [Theory]
@@ -31,6 +31,8 @@ public class ViaEventTitleTests
         // Assert
         Assert.False(result.IsSuccess);
         Assert.Contains(result.OperationErrors, e => e.Code == ErrorCode.InvalidInput);
+        Assert.Contains(result.OperationErrors,
+            error => error.Message.Contains("Title must be between 3 and 75 characters long."));
     }
 
     [Fact]
@@ -45,6 +47,8 @@ public class ViaEventTitleTests
         // Assert
         Assert.False(result.IsSuccess);
         Assert.Contains(result.OperationErrors, e => e.Code == ErrorCode.InvalidInput);
+        Assert.Contains(result.OperationErrors,
+            error => error.Message.Contains("Title must be between 3 and 75 characters long."));
     }
 
     [Fact]
@@ -59,5 +63,7 @@ public class ViaEventTitleTests
         // Assert
         Assert.False(result.IsSuccess);
         Assert.Contains(result.OperationErrors, e => e.Code == ErrorCode.InvalidInput);
+        Assert.Contains(result.OperationErrors,
+            error => error.Message.Contains("Title must be between 3 and 75 characters long."));
     }
 }

@@ -3,83 +3,109 @@ using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 
 namespace UnitTests.Features.Event.UpdateTitle;
 
-public class ViaEventUpdateTitleTests
+public abstract class ViaEventUpdateTitleTests
 {
-    [Fact]
-    public void UpdateTitle_Success_WhenEventIsDraft()
+    public class S1
     {
-        // Arrange
-        var viaEvent = ViaEventTestDataFactory.CreateDraftEvent();
-        const string newTitle = "Scary Movie Night!";
+        [Theory]
+        [InlineData("Scary Movie Night!")]
+        [InlineData("Graduation Gala")]
+        [InlineData("VIA Hackathon")]
+        public void UpdateTitle_Success_WhenEventIsDraft(string newTitle)
+        {
+            // Arrange
+            var viaEvent = ViaEventTestDataFactory.CreateDraftEvent();
 
-        // Act
-        var result = viaEvent.UpdateTitle(newTitle);
+            // Act
+            var result = viaEvent.UpdateTitle(newTitle);
 
-        // Assert
-        Assert.True(result.IsSuccess);
-        Assert.Equal(newTitle, viaEvent.Title?.Value);
-        Assert.Equal(ViaEventStatus.Draft, viaEvent.Status); // Remains Draft if it was Draft
+            // Assert
+            Assert.True(result.IsSuccess);
+            Assert.Equal(newTitle, viaEvent.Title?.Value);
+            Assert.Equal(ViaEventStatus.Draft, viaEvent.Status); // Remains Draft if it was Draft
+        }
     }
 
-    [Fact]
-    public void UpdateTitle_Success_RevertsToDraft_WhenEventIsReady()
+    public class S2
     {
-        // Arrange
-        var viaEvent = ViaEventTestDataFactory.CreateReadyEvent();
-        const string newTitle = "Graduation Gala";
+        [Theory]
+        [InlineData("Scary Movie Night!")]
+        [InlineData("Graduation Gala")]
+        [InlineData("VIA Hackathon")]
+        public void UpdateTitle_Success_RevertsToDraft_WhenEventIsReady(string newTitle)
+        {
+            // Arrange
+            var viaEvent = ViaEventTestDataFactory.CreateReadyEvent();
 
-        // Act
-        var result = viaEvent.UpdateTitle(newTitle);
+            // Act
+            var result = viaEvent.UpdateTitle(newTitle);
 
-        // Assert
-        Assert.True(result.IsSuccess);
-        Assert.Equal(newTitle, viaEvent.Title?.Value);
-        Assert.Equal(ViaEventStatus.Draft, viaEvent.Status); // Reverts to Draft if it was Ready
+            // Assert
+            Assert.True(result.IsSuccess);
+            Assert.Equal(newTitle, viaEvent.Title?.Value);
+            Assert.Equal(ViaEventStatus.Draft, viaEvent.Status); // Reverts to Draft
+        }
     }
 
-    [Theory]
-    [InlineData("")]
-    [InlineData("XY")]
-    [InlineData(
-        "This title is way too long and definitely exceeds the seventy-five character limit set by the domain rules.")]
-    public void UpdateTitle_FailureDueToInvalidTitle(string invalidTitle)
+    public class F1_F2_F3_F4
     {
-        // Arrange
-        var viaEvent = ViaEventTestDataFactory.CreateDraftEvent();
+        [Theory]
+        [InlineData("")]
+        [InlineData("XY")]
+        [InlineData(
+            "This title is way too long and definitely exceeds the seventy-five character limit set by the domain rules.")]
+        [InlineData(null)]
+        public void UpdateTitle_FailureDueToInvalidTitle(string invalidTitle)
+        {
+            // Arrange
+            var viaEvent = ViaEventTestDataFactory.CreateDraftEvent();
 
-        // Act
-        var result = viaEvent.UpdateTitle(invalidTitle);
+            // Act
+            var result = viaEvent.UpdateTitle(invalidTitle);
 
-        // Assert
-        Assert.False(result.IsSuccess);
-        Assert.Contains(result.OperationErrors, error => error.Code == ErrorCode.InvalidInput);
+            // Assert
+            Assert.True(result.IsFailure);
+            Assert.Contains(result.OperationErrors, error => error.Code == ErrorCode.InvalidInput);
+            Assert.Contains(result.OperationErrors,
+                error => error.Message != null &&
+                         error.Message.Contains("Title must be between 3 and 75 characters long."));
+        }
     }
 
-    [Fact]
-    public void UpdateTitle_FailureDueToNonModifiableState_WhenEventIsActive()
+    public class F5
     {
-        // Arrange
-        var viaEvent = ViaEventTestDataFactory.CreateActiveEvent();
+        [Fact]
+        public void UpdateTitle_FailureDueToNonModifiableState_WhenEventIsActive()
+        {
+            // Arrange
+            var viaEvent = ViaEventTestDataFactory.CreateActiveEvent();
 
-        // Act
-        var result = viaEvent.UpdateTitle("New Title");
+            // Act
+            var result = viaEvent.UpdateTitle("New Title");
 
-        // Assert
-        Assert.False(result.IsSuccess);
-        Assert.Contains(result.OperationErrors, error => error.Code == ErrorCode.BadRequest);
+            // Assert
+            Assert.True(result.IsFailure);
+            Assert.Contains(result.OperationErrors, error => error.Code == ErrorCode.BadRequest);
+            Assert.Contains(result.OperationErrors,
+                error => error.Message != null &&
+                         error.Message.Contains("The event cannot be modified in its current state."));
+        }
     }
 
-    [Fact]
-    public void UpdateTitle_FailureDueToNonModifiableState_WhenEventIsCancelled()
+    public class F6
     {
-        // Arrange
-        var viaEvent = ViaEventTestDataFactory.CreateCancelledEvent();
+        [Fact]
+        public void UpdateTitle_FailureDueToNonModifiableState_WhenEventIsCancelled()
+        {
+            // Arrange
+            var viaEvent = ViaEventTestDataFactory.CreateCancelledEvent();
 
-        // Act
-        var result = viaEvent.UpdateTitle("New Title");
+            // Act
+            var result = viaEvent.UpdateTitle("New Title");
 
-        // Assert
-        Assert.False(result.IsSuccess);
-        Assert.Contains(result.OperationErrors, error => error.Code == ErrorCode.BadRequest);
+            // Assert
+            Assert.True(result.IsFailure);
+            Assert.Contains(result.OperationErrors, error => error.Code == ErrorCode.BadRequest);
+        }
     }
 }

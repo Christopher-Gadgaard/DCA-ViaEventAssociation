@@ -10,5 +10,4 @@ public abstract class ViaId: ValueObject
     {
         Value = value;
     }
-    
 }
