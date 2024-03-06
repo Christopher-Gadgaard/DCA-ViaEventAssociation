@@ -3,20 +3,19 @@ using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
 namespace Via.EventAssociation.Core.Domain.Aggregates.Guests;
 
-public class ViaGuest:AggregateRoot<ViaId>
+public class ViaGuest:AggregateRoot<ViaGuestId>
 {
-    public ViaGuestId ViaGuestId;
+    
     private ViaGuestName _viaGuestName;
     private ViaEmail _viaEmail;
 
-
-    public ViaGuest()
+    internal new ViaGuestId Id => base.Id;
+    internal ViaGuestName ViaGuestName => _viaGuestName;
+    internal ViaEmail ViaEmail => _viaEmail;
+    
+ 
+    public ViaGuest( ViaGuestId viaGuestId, ViaGuestName viaGuestName, ViaEmail viaEmail):base(viaGuestId)
     {
-        
-    }
-    public ViaGuest( ViaGuestId viaGuestId, ViaGuestName viaGuestName, ViaEmail viaEmail)
-    {
-        ViaGuestId = viaGuestId;
         _viaGuestName = viaGuestName;
         _viaEmail = viaEmail;
     }

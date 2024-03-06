@@ -4,21 +4,25 @@ using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace Via.EventAssociation.Core.Domain.Aggregates.Locations;
 
-public class ViaLocation : AggregateRoot<ViaId>
+public class ViaLocation : AggregateRoot<ViaLocationId>
 {
-    public ViaLocationId ViaLocationId { get; private init; }
-    public ViaLocationName ViaLocationName { get; private set; }
-    public ViaLocationCapacity ViaLocationCapacity { get; private set; }
+    private ViaLocationId _viaLocationId;
+    private ViaLocationName _viaLocationName;
+    private ViaLocationCapacity _viaLocationCapacity;
 
-    public ViaLocation()
-    {
-    }
+
+    internal new ViaLocationId Id => base.Id;
+    internal new ViaLocationName Name => _viaLocationName;
+    internal new ViaLocationCapacity Capacity => _viaLocationCapacity;
+    
+    
+    
 
     public ViaLocation(ViaLocationId locationId, ViaLocationName locationName, ViaLocationCapacity locationCapacity)
     {
-        ViaLocationId = locationId;
-        ViaLocationName = locationName;
-        ViaLocationCapacity = locationCapacity;
+
+        _viaLocationName = locationName ?? ViaLocationName.Create("Location Name").Payload;
+        _viaLocationCapacity = locationCapacity ?? ViaLocationCapacity.Create(20).Payload;
     }
 
     private static OperationResult<ViaLocation> Create(ViaLocationId locationId, ViaLocationName locationName,
@@ -33,7 +37,7 @@ public class ViaLocation : AggregateRoot<ViaId>
         var result = ViaLocationName.Create(name);
         if (result.IsSuccess)
         {
-            this.ViaLocationName = result.Payload;
+            this._viaLocationName = result.Payload;
             return OperationResult<ViaLocationName>.Success(result.Payload);
         }
         else
@@ -47,7 +51,7 @@ public class ViaLocation : AggregateRoot<ViaId>
         var result = ViaLocationCapacity.Create(capacity);
         if (result.IsSuccess)
         {
-            this.ViaLocationCapacity = result.Payload;
+            this._viaLocationCapacity = result.Payload;
             return OperationResult<ViaLocationCapacity>.Success(result.Payload);
         }
         else
