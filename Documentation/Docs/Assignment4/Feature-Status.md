@@ -38,15 +38,15 @@
 
 * [ ] UC4 - Update Start and End Time
     * [x] Value - ViaEventDateTimeRange
-    * [ ] S1
-    * [ ] S2
-    * [ ] S3
-    * [ ] S4
-    * [ ] S5
-    * [ ] F1
-    * [ ] F2
-    * [ ] F3
-    * [ ] F4
+    * [x] S1
+    * [x] S2
+    * [x] S3
+    * [x] S4
+    * [x] S5
+    * [x] F1
+    * [x] F2
+    * [x] F3
+    * [x] F4
     * [ ] F5
     * [ ] F6
     * [ ] F7

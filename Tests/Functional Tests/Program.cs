@@ -61,7 +61,11 @@ abstract class Program
             .Build();
         
         
-        viaEvent.UpdateStatus(ViaEventStatus.Cancelled);
+       var result = viaEvent.UpdateStatus(ViaEventStatus.Cancelled);
+       if (result.IsSuccess)
+       {
+           Console.WriteLine("Event Cancelled");
+       }
 
         Console.WriteLine(viaEvent.Title.Value);
         Console.WriteLine(viaEvent.Status);
