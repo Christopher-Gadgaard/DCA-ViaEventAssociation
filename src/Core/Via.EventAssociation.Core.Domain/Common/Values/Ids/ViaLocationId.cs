@@ -5,15 +5,13 @@ namespace Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
 public class ViaLocationId :ViaId
 {
-  
-    
     public ViaLocationId(Guid value):base(value)
     {
       
     }
     public static OperationResult<ViaLocationId> Create()
     {
-        var id = new Guid();
+        var id = Guid.NewGuid();
         return new ViaLocationId(id);
     }
 

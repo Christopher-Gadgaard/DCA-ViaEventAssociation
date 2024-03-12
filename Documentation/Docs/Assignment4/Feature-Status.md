@@ -108,8 +108,7 @@
 
 
 * [ ] UC11 - Guest Participates Public Event
-    * [ ] S1
-    * [ ] S2
+    * [X] S1
     * [ ] F1
     * [ ] F2
     * [ ] F3
