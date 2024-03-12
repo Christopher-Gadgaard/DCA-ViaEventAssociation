@@ -109,10 +109,12 @@ public abstract class ViaEventUpdateDescriptionTests
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
+            
             var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
                 .WithDescription("Initial Description")
                 .WithStatus(ViaEventStatus.Active)
                 .Build();
+            
             var descriptionResult = ViaEventDescription.Create("New description");
             Assert.True(descriptionResult.IsSuccess);
             
