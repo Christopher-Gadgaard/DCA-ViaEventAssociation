@@ -39,17 +39,18 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     {
         _title = title ?? ViaEventTitle.Create("Working Title").Payload;
         _description = description ?? ViaEventDescription.Create("").Payload;
-        _dateTimeRange = dateTimeRange;
+        _dateTimeRange =  dateTimeRange ?? ViaDateTimeRange.Create(DateTime.UtcNow.AddSeconds(30),DateTime.UtcNow.AddSeconds(30).AddHours(1) ).Payload; //TODO: ASK TROELS ABOUT THIS
         _maxGuests = maxGuests ?? ViaMaxGuests.Create(5).Payload;
         _status = status;
         _visibility = visibility;
+        _guests = new List<ViaGuestId>();
     }
 
     public static OperationResult<ViaEvent> Create(ViaEventId id)
     {
         return new ViaEvent(id);
     }
-    
+
     public static OperationResult<ViaEvent> Create(
         ViaEventId id,
         ViaEventTitle? title = null,
@@ -63,7 +64,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         return OperationResult<ViaEvent>.Success(viaEvent);
     }
 
-    public OperationResult UpdateTitle(string newTitle)
+    public OperationResult UpdateTitle(ViaEventTitle newTitle)
     {
         var modifiableStateCheck = CheckModifiableState();
         if (modifiableStateCheck.IsFailure)
@@ -71,36 +72,100 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             return modifiableStateCheck;
         }
 
-        var titleUpdateResult = ViaEventTitle.Create(newTitle);
-        if (titleUpdateResult.IsFailure)
-        {
-            return OperationResult.Failure(titleUpdateResult.OperationErrors);
-        }
-
-        _title = titleUpdateResult.Payload!;
+        _title = newTitle;
 
         return IfReadyRevertToDraft();
     }
-    
-    public OperationResult UpdateDescription(string newDescription)
+
+    public OperationResult UpdateDescription(ViaEventDescription newDescription)
     {
         var modifiableStateCheck = CheckModifiableState();
         if (modifiableStateCheck.IsFailure)
         {
             return modifiableStateCheck;
         }
-
-        var descriptionUpdateResult = ViaEventDescription.Create(newDescription);
-        if (descriptionUpdateResult.IsFailure)
-        {
-            return OperationResult.Failure(descriptionUpdateResult.OperationErrors);
-        }
-
-        _description = descriptionUpdateResult.Payload!;
         
+        _description = newDescription;
+
         return IfReadyRevertToDraft();
     }
-    
+
+    public OperationResult UpdateDateTimeRange(ViaDateTimeRange newDateTimeRange)
+    {
+        var modifiableStateCheck = CheckModifiableState();
+        if (modifiableStateCheck.IsFailure)
+        {
+            return modifiableStateCheck;
+        }
+
+        _dateTimeRange = newDateTimeRange;
+
+        return IfReadyRevertToDraft();
+    }
+
+    public OperationResult UpdateStatus(ViaEventStatus newStatus)
+    {
+        if (newStatus == ViaEventStatus.Cancelled)
+        {
+            return TryCancelEvent();
+        }
+        
+        return (_status, newStatus) switch
+        {
+            (ViaEventStatus.Draft, ViaEventStatus.Ready) => TryReadyEvent(),
+            (ViaEventStatus.Ready, ViaEventStatus.Active) => TryActivateEvent(),
+            _ => OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.BadRequest, $"Transitioning from '{_status}' to '{newStatus}' status is not supported.")
+            })
+        };
+    }
+
+   private OperationResult TryReadyEvent()
+   {
+       if (!IsEventDataComplete())
+       {
+           return OperationResult.Failure(new List<OperationError>
+           {
+               new(ErrorCode.BadRequest, "Event data is incomplete, cannot transition to Ready.")
+           });
+       }
+
+       _status = ViaEventStatus.Ready;
+       return OperationResult.Success();
+   }
+
+   private OperationResult TryActivateEvent()
+   {
+       if (DateTime.UtcNow >= _dateTimeRange!.StartValue) 
+       {
+           return OperationResult.Failure(new List<OperationError>
+           {
+               new(ErrorCode.BadRequest, "Cannot activate past events.")
+           });
+       }
+
+       _status = ViaEventStatus.Active;
+       return OperationResult.Success();
+   }
+
+   private OperationResult TryCancelEvent()
+   {
+       _status = ViaEventStatus.Cancelled;
+       return OperationResult.Success();
+   }
+
+   private bool IsEventDataComplete()
+   {
+
+       var titleIsInitialized = _title != null;
+       var descriptionIsInitialized = _description != null; 
+       var dateTimeRangeIsInitialized = _dateTimeRange != null;
+       var maxGuestsIsInitialized = _maxGuests != null;
+       
+       return titleIsInitialized && descriptionIsInitialized && dateTimeRangeIsInitialized && maxGuestsIsInitialized;
+   }
+   
     private OperationResult CheckModifiableState()
     {
         return _status is ViaEventStatus.Active or ViaEventStatus.Cancelled
@@ -108,7 +173,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
                 {new(ErrorCode.BadRequest, "The event cannot be modified in its current state.")})
             : OperationResult.Success();
     }
-    
+
     private OperationResult IfReadyRevertToDraft()
     {
         if (_status == ViaEventStatus.Ready)

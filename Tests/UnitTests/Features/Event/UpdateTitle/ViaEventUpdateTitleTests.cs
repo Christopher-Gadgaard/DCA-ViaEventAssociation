@@ -1,4 +1,6 @@
 ﻿using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
+using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
+using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 
 namespace UnitTests.Features.Event.UpdateTitle;
@@ -14,10 +16,16 @@ public abstract class ViaEventUpdateTitleTests
         public void UpdateTitle_Success_WhenEventIsDraft(string newTitle)
         {
             // Arrange
-            var viaEvent = ViaEventTestDataFactory.CreateDraftEvent();
+            var viaEventId = ViaEventId.Create();
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
+                .WithTitle("Initial Title")
+                .Build();
+
+            var titleResult = ViaEventTitle.Create(newTitle);
+            Assert.True(titleResult.IsSuccess);
 
             // Act
-            var result = viaEvent.UpdateTitle(newTitle);
+            var result = viaEvent.UpdateTitle(titleResult.Payload!);
 
             // Assert
             Assert.True(result.IsSuccess);
@@ -35,10 +43,17 @@ public abstract class ViaEventUpdateTitleTests
         public void UpdateTitle_Success_RevertsToDraft_WhenEventIsReady(string newTitle)
         {
             // Arrange
-            var viaEvent = ViaEventTestDataFactory.CreateReadyEvent();
+            var viaEventId = ViaEventId.Create();
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
+                .WithTitle("Initial Title")
+                .WithStatus(ViaEventStatus.Ready)
+                .Build();
+
+            var titleResult = ViaEventTitle.Create(newTitle);
+            Assert.True(titleResult.IsSuccess);
 
             // Act
-            var result = viaEvent.UpdateTitle(newTitle);
+            var result = viaEvent.UpdateTitle(titleResult.Payload!);
 
             // Assert
             Assert.True(result.IsSuccess);
@@ -58,15 +73,19 @@ public abstract class ViaEventUpdateTitleTests
         public void UpdateTitle_FailureDueToInvalidTitle(string invalidTitle)
         {
             // Arrange
-            var viaEvent = ViaEventTestDataFactory.CreateDraftEvent();
+            var viaEventId = ViaEventId.Create();
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
+                .WithTitle("Initial Title")
+                .Build();
 
             // Act
-            var result = viaEvent.UpdateTitle(invalidTitle);
+            // This will fail to create a title, so we check for failure directly
+            var titleResult = ViaEventTitle.Create(invalidTitle);
 
             // Assert
-            Assert.True(result.IsFailure);
-            Assert.Contains(result.OperationErrors, error => error.Code == ErrorCode.InvalidInput);
-            Assert.Contains(result.OperationErrors,
+            Assert.True(titleResult.IsFailure);
+            Assert.Contains(titleResult.OperationErrors, error => error.Code == ErrorCode.InvalidInput);
+            Assert.Contains(titleResult.OperationErrors,
                 error => error.Message != null &&
                          error.Message.Contains("Title must be between 3 and 75 characters long."));
         }
@@ -78,10 +97,17 @@ public abstract class ViaEventUpdateTitleTests
         public void UpdateTitle_FailureDueToNonModifiableState_WhenEventIsActive()
         {
             // Arrange
-            var viaEvent = ViaEventTestDataFactory.CreateActiveEvent();
+            var viaEventId = ViaEventId.Create();
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
+                .WithTitle("Initial Title")
+                .WithStatus(ViaEventStatus.Active)
+                .Build();
+
+            var titleResult = ViaEventTitle.Create("New Title");
+            Assert.True(titleResult.IsSuccess);
 
             // Act
-            var result = viaEvent.UpdateTitle("New Title");
+            var result = viaEvent.UpdateTitle(titleResult.Payload!);
 
             // Assert
             Assert.True(result.IsFailure);
@@ -98,14 +124,24 @@ public abstract class ViaEventUpdateTitleTests
         public void UpdateTitle_FailureDueToNonModifiableState_WhenEventIsCancelled()
         {
             // Arrange
-            var viaEvent = ViaEventTestDataFactory.CreateCancelledEvent();
+            var viaEventId = ViaEventId.Create();
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
+                .WithTitle("Initial Title")
+                .WithStatus(ViaEventStatus.Cancelled)
+                .Build();
+
+            var titleResult = ViaEventTitle.Create("New Title");
+            Assert.True(titleResult.IsSuccess);
 
             // Act
-            var result = viaEvent.UpdateTitle("New Title");
+            var result = viaEvent.UpdateTitle(titleResult.Payload!);
 
             // Assert
             Assert.True(result.IsFailure);
             Assert.Contains(result.OperationErrors, error => error.Code == ErrorCode.BadRequest);
+            Assert.Contains(result.OperationErrors,
+                error => error.Message != null &&
+                         error.Message.Contains("The event cannot be modified in its current state."));
         }
     }
 }

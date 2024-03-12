@@ -6,11 +6,13 @@ namespace UnitTests.Features.Event.Values;
 
 public class ViaEventTitleTests
 {
-    [Fact]
-    public void Create_ShouldReturnSuccess_WhenTitleIsValid()
-    {
+    [Theory]
+    [InlineData("Scary Movie Night!")]
+    [InlineData("Graduation Gala")]
+    [InlineData("VIA Hackathon")]
+    public void Create_ShouldReturnSuccess_WhenTitleIsValid(string validTitle)
+    {   
         // Arrange
-        const string validTitle = "Valid Event Title";
 
         // Act
         var result = ViaEventTitle.Create(validTitle);
@@ -32,7 +34,7 @@ public class ViaEventTitleTests
         Assert.False(result.IsSuccess);
         Assert.Contains(result.OperationErrors, e => e.Code == ErrorCode.InvalidInput);
         Assert.Contains(result.OperationErrors,
-            error => error.Message.Contains("Title must be between 3 and 75 characters long."));
+            error => error.Message != null && error.Message.Contains("Title must be between 3 and 75 characters long."));
     }
 
     [Fact]
@@ -48,7 +50,7 @@ public class ViaEventTitleTests
         Assert.False(result.IsSuccess);
         Assert.Contains(result.OperationErrors, e => e.Code == ErrorCode.InvalidInput);
         Assert.Contains(result.OperationErrors,
-            error => error.Message.Contains("Title must be between 3 and 75 characters long."));
+            error => error.Message != null && error.Message.Contains("Title must be between 3 and 75 characters long."));
     }
 
     [Fact]
@@ -64,6 +66,6 @@ public class ViaEventTitleTests
         Assert.False(result.IsSuccess);
         Assert.Contains(result.OperationErrors, e => e.Code == ErrorCode.InvalidInput);
         Assert.Contains(result.OperationErrors,
-            error => error.Message.Contains("Title must be between 3 and 75 characters long."));
+            error => error.Message != null && error.Message.Contains("Title must be between 3 and 75 characters long."));
     }
 }
