@@ -25,38 +25,22 @@ public class ViaLocation : AggregateRoot<ViaLocationId>
         _viaLocationCapacity = locationCapacity ?? ViaLocationCapacity.Create(20).Payload;
     }
 
-    private static OperationResult<ViaLocation> Create(ViaLocationId locationId, ViaLocationName locationName,
+    public static OperationResult<ViaLocation> Create(ViaLocationId locationId, ViaLocationName locationName,
         ViaLocationCapacity locationCapacity)
     {
         return new ViaLocation(locationId, locationName, locationCapacity);
     }
 
-    public OperationResult<ViaLocationName> UpdateName(string name)
+    public OperationResult<ViaLocationName> UpdateName(ViaLocationName name)
     {
-        ViaLocationName updatedName = new ViaLocationName(name);
-        var result = ViaLocationName.Create(name);
-        if (result.IsSuccess)
-        {
-            this._viaLocationName = result.Payload;
-            return OperationResult<ViaLocationName>.Success(result.Payload);
-        }
-        else
-        {
-            return OperationResult<ViaLocationName>.Failure(result.OperationErrors);
-        }
+        _viaLocationName = name;
+        
+        return OperationResult<ViaLocationName>.Success(name);
     }
 
-    public OperationResult<ViaLocationCapacity> UpdateLocationCapacity(int capacity)
+    public OperationResult<ViaLocationCapacity> UpdateLocationCapacity(ViaLocationCapacity capacity)
     {
-        var result = ViaLocationCapacity.Create(capacity);
-        if (result.IsSuccess)
-        {
-            this._viaLocationCapacity = result.Payload;
-            return OperationResult<ViaLocationCapacity>.Success(result.Payload);
-        }
-        else
-        {
-            return OperationResult<ViaLocationCapacity>.Failure(result.OperationErrors);
-        }
+        _viaLocationCapacity= capacity;
+        return OperationResult<ViaLocationCapacity>.Success(capacity);
     }
 }
