@@ -14,5 +14,7 @@
     &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Invitation.ViaInvitationIdTests+ViaEventIdTests&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Invitation.CreateInvitationTest.Create_WithValidIds_ShouldReturnSuccessAndPendingStatus&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Invitation.CreateInvitationTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.InvitationRequest.ViaInvitationRequestIdTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Invitation.ViaInvitationIdTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

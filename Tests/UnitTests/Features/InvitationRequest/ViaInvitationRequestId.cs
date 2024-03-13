@@ -1,17 +1,15 @@
 ﻿using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
-namespace UnitTests.Features.Invitation;
-
-public class ViaInvitationIdTests
-{
+namespace UnitTests.Features.InvitationRequest;
 
 
-    
+    public class ViaInvitationRequestIdTests
+    {
         [Fact]
         public void Create_ShouldGenerateNonEmptyGuid()
         {
             // Act
-            var result = ViaInvitationId.Create();
+            var result = ViaInvitationRequestId.Create();
 
             // Assert
             Assert.True(result.IsSuccess);
