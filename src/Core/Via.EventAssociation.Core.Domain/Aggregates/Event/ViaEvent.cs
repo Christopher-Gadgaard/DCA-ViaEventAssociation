@@ -134,6 +134,34 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             })
         };
     }
+    
+    public OperationResult MakePublic()
+    {
+        if (_status == ViaEventStatus.Cancelled)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.BadRequest, "The event cannot be modified in its current state.")
+            });
+        }
+        
+        _visibility = ViaEventVisibility.Public;
+        return OperationResult.Success();
+    }
+    
+    public OperationResult MakePrivate()
+    {
+        if (_status is ViaEventStatus.Cancelled or ViaEventStatus.Active)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.BadRequest, "The event cannot be modified in its current state.")
+            });
+        }
+        
+        _visibility = ViaEventVisibility.Private;
+        return OperationResult.Success();
+    }
 
     private OperationResult TryReadyEvent()
     {

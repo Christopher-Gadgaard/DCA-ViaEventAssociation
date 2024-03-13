@@ -77,6 +77,19 @@ public class ViaEventTestDataFactory
         }
         return this;
     }
+    
+    public ViaEventTestDataFactory WithVisibility(ViaEventVisibility visibility)
+    {
+        if (visibility == ViaEventVisibility.Public)
+        {
+            _event.MakePublic();
+        }
+        else
+        {
+            _event.MakePrivate();
+        }
+        return this;
+    }
 
     public ViaEvent Build()
     {

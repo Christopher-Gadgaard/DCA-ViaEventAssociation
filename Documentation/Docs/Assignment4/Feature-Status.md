@@ -36,7 +36,7 @@
     * [x] F3
 
 
-* [ ] UC4 - Update Start and End Time
+* [x] UC4 - Update Start and End Time
     * [x] Value - ViaEventDateTimeRange
     * [x] S1
     * [x] S2
@@ -47,25 +47,25 @@
     * [x] F2
     * [x] F3
     * [x] F4
-    * [ ] F5
-    * [ ] F6
-    * [ ] F7
-    * [ ] F8
-    * [ ] F9
-    * [ ] F10
-    * [ ] F11
+    * [x] F5
+    * [x] F6
+    * [x] F7
+    * [x] F8
+    * [x] F9
+    * [x] F10
+    * [x] F11
 
 
-* [ ] UC5 - Make Event Public
-    * [ ] S1
-    * [ ] F1
+* [x] UC5 - Make Event Public
+    * [x] S1
+    * [x] F1
 
 
-* [ ] UC6 - Make Event Private
-    * [ ] S1
-    * [ ] S2
-    * [ ] F1
-    * [ ] F2
+* [x] UC6 - Make Event Private
+    * [x] S1
+    * [x] S2
+    * [x] F1
+    * [x] F2
 
 
 * [ ] UC7 - Set Maximum Number of Guests

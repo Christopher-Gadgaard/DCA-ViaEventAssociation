@@ -18,11 +18,21 @@ public class ViaDateTimeRange : ValueObject
         StartValue = startValue;
         EndValue = endValue;
     }
-   
 
     internal static OperationResult<ViaDateTimeRange> Create(DateTime startValue, DateTime endValue, ITimeProvider? timeProvider = null)
     {
         _timeProvider = timeProvider ?? new SystemTimeProvider();
+        var validation = Validate(startValue, endValue);
+        if (validation.IsSuccess)
+        {
+            return new ViaDateTimeRange(startValue, endValue);
+        }
+
+        return validation.OperationErrors;
+    }
+    public static OperationResult<ViaDateTimeRange> Create(DateTime startValue, DateTime endValue)
+    {
+        _timeProvider = new SystemTimeProvider();
         var validation = Validate(startValue, endValue);
         if (validation.IsSuccess)
         {
