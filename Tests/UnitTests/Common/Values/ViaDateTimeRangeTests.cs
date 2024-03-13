@@ -1,4 +1,5 @@
 ﻿using UnitTests.Common.Factories;
+using UnitTests.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Common.Values;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 
@@ -13,7 +14,8 @@ public class ViaDateTimeRangeTests
         var (start, end) = ViaDateTimeRangeTestDataFactory.CreateValidDateRange();
 
         // Act
-        var result = ViaDateTimeRange.Create(start, end);
+        var fakeTimeProvider = new FakeTimeProvider(new DateTime(2022, 08, 25, 10, 00, 00));
+        var result = ViaDateTimeRange.Create(start, end, fakeTimeProvider);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -28,7 +30,8 @@ public class ViaDateTimeRangeTests
         var (start, end) = ViaDateTimeRangeTestDataFactory.CreateValidDateRange_StartTimeAtBoundary();
 
         // Act
-        var result = ViaDateTimeRange.Create(start, end);
+        var fakeTimeProvider = new FakeTimeProvider(new DateTime(2022, 08, 25, 10, 00, 00));
+        var result = ViaDateTimeRange.Create(start, end, fakeTimeProvider);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -43,7 +46,8 @@ public class ViaDateTimeRangeTests
         var (start, end) = ViaDateTimeRangeTestDataFactory.CreateInvalidDateRange_StartTimeBeforeBoundary();
 
         // Act
-        var result = ViaDateTimeRange.Create(start, end);
+        var fakeTimeProvider = new FakeTimeProvider(new DateTime(2022, 08, 25, 10, 00, 00));
+        var result = ViaDateTimeRange.Create(start, end, fakeTimeProvider);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -59,7 +63,8 @@ public class ViaDateTimeRangeTests
         var (start, end) = ViaDateTimeRangeTestDataFactory.CreateValidDateRange_EndTimeAtNextDayBoundary();
 
         // Act
-        var result = ViaDateTimeRange.Create(start, end);
+        var fakeTimeProvider = new FakeTimeProvider(new DateTime(2022, 08, 25, 10, 00, 00));
+        var result = ViaDateTimeRange.Create(start, end, fakeTimeProvider);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -74,7 +79,8 @@ public class ViaDateTimeRangeTests
         var (start, end) = ViaDateTimeRangeTestDataFactory.CreateInvalidDateRange_EndTimeAfterNextDayBoundary();
 
         // Act
-        var result = ViaDateTimeRange.Create(start, end);
+        var fakeTimeProvider = new FakeTimeProvider(new DateTime(2022, 08, 25, 10, 00, 00));
+        var result = ViaDateTimeRange.Create(start, end, fakeTimeProvider);
 
         // Assert
         Assert.False(result.IsSuccess);

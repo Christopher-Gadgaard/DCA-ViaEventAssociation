@@ -1,6 +1,8 @@
 ﻿using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
 using Via.EventAssociation.Core.Domain.Common.Bases;
+using Via.EventAssociation.Core.Domain.Common.Utilities;
+using Via.EventAssociation.Core.Domain.Common.Utilities.Interfaces;
 using Via.EventAssociation.Core.Domain.Common.Values;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
@@ -16,7 +18,9 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     private ViaMaxGuests _maxGuests;
     private ViaEventStatus _status;
     private ViaEventVisibility _visibility;
-    private List<ViaGuestId> _guests = new();
+    private List<ViaGuestId> _guests;
+
+    private readonly ITimeProvider _timeProvider;
 
     internal new ViaEventId Id => base.Id;
     internal ViaEventTitle? Title => _title;
@@ -34,12 +38,16 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         ViaDateTimeRange? dateTimeRange = null,
         ViaMaxGuests? maxGuests = null,
         ViaEventStatus status = ViaEventStatus.Draft,
-        ViaEventVisibility visibility = ViaEventVisibility.Private)
+        ViaEventVisibility visibility = ViaEventVisibility.Private, 
+        ITimeProvider? timeProvider = null)
         : base(id)
     {
+        _timeProvider = timeProvider ?? new SystemTimeProvider();
         _title = title ?? ViaEventTitle.Create("Working Title").Payload;
         _description = description ?? ViaEventDescription.Create("").Payload;
-        _dateTimeRange =  dateTimeRange ?? ViaDateTimeRange.Create(DateTime.UtcNow.AddSeconds(30),DateTime.UtcNow.AddSeconds(30).AddHours(1) ).Payload; //TODO: ASK TROELS ABOUT THIS
+        _dateTimeRange = dateTimeRange ?? ViaDateTimeRange
+            .Create(DateTime.UtcNow.AddSeconds(30), DateTime.UtcNow.AddSeconds(30).AddHours(1))
+            .Payload; //TODO: ASK TROELS ABOUT THIS
         _maxGuests = maxGuests ?? ViaMaxGuests.Create(5).Payload;
         _status = status;
         _visibility = visibility;
@@ -50,17 +58,23 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     {
         return new ViaEvent(id);
     }
+    
+    internal static OperationResult<ViaEvent> Create(ViaEventId id, ITimeProvider timeProvider)
+    {
+        return new ViaEvent(id, timeProvider: timeProvider);
+    }
 
-    public static OperationResult<ViaEvent> Create(
+    internal static OperationResult<ViaEvent> Create(
         ViaEventId id,
         ViaEventTitle? title = null,
         ViaEventDescription? description = null,
         ViaDateTimeRange? dateTimeRange = null,
         ViaMaxGuests? maxGuests = null,
         ViaEventStatus status = ViaEventStatus.Draft,
-        ViaEventVisibility visibility = ViaEventVisibility.Private)
+        ViaEventVisibility visibility = ViaEventVisibility.Private,
+        ITimeProvider? timeProvider = null)
     {
-        var viaEvent = new ViaEvent(id, title, description, dateTimeRange, maxGuests, status, visibility);
+        var viaEvent = new ViaEvent(id, title, description, dateTimeRange, maxGuests, status, visibility, timeProvider);
         return OperationResult<ViaEvent>.Success(viaEvent);
     }
 
@@ -84,7 +98,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         {
             return modifiableStateCheck;
         }
-        
+
         _description = newDescription;
 
         return IfReadyRevertToDraft();
@@ -109,7 +123,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         {
             return TryCancelEvent();
         }
-        
+
         return (_status, newStatus) switch
         {
             (ViaEventStatus.Draft, ViaEventStatus.Ready) => TryReadyEvent(),
@@ -121,51 +135,50 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         };
     }
 
-   private OperationResult TryReadyEvent()
-   {
-       if (!IsEventDataComplete())
-       {
-           return OperationResult.Failure(new List<OperationError>
-           {
-               new(ErrorCode.BadRequest, "Event data is incomplete, cannot transition to Ready.")
-           });
-       }
+    private OperationResult TryReadyEvent()
+    {
+        if (!IsEventDataComplete())
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.BadRequest, "Event data is incomplete, cannot transition to Ready.")
+            });
+        }
 
-       _status = ViaEventStatus.Ready;
-       return OperationResult.Success();
-   }
+        _status = ViaEventStatus.Ready;
+        return OperationResult.Success();
+    }
 
-   private OperationResult TryActivateEvent()
-   {
-       if (DateTime.UtcNow >= _dateTimeRange!.StartValue) 
-       {
-           return OperationResult.Failure(new List<OperationError>
-           {
-               new(ErrorCode.BadRequest, "Cannot activate past events.")
-           });
-       }
+    private OperationResult TryActivateEvent()
+    {
+        if (_timeProvider.Now >= _dateTimeRange!.StartValue)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.BadRequest, "Cannot activate past events.")
+            });
+        }
 
-       _status = ViaEventStatus.Active;
-       return OperationResult.Success();
-   }
+        _status = ViaEventStatus.Active;
+        return OperationResult.Success();
+    }
 
-   private OperationResult TryCancelEvent()
-   {
-       _status = ViaEventStatus.Cancelled;
-       return OperationResult.Success();
-   }
+    private OperationResult TryCancelEvent()
+    {
+        _status = ViaEventStatus.Cancelled;
+        return OperationResult.Success();
+    }
 
-   private bool IsEventDataComplete()
-   {
+    private bool IsEventDataComplete()
+    {
+        var titleIsInitialized = _title != null;
+        var descriptionIsInitialized = _description != null;
+        var dateTimeRangeIsInitialized = _dateTimeRange != null;
+        var maxGuestsIsInitialized = _maxGuests != null;
 
-       var titleIsInitialized = _title != null;
-       var descriptionIsInitialized = _description != null; 
-       var dateTimeRangeIsInitialized = _dateTimeRange != null;
-       var maxGuestsIsInitialized = _maxGuests != null;
-       
-       return titleIsInitialized && descriptionIsInitialized && dateTimeRangeIsInitialized && maxGuestsIsInitialized;
-   }
-   
+        return titleIsInitialized && descriptionIsInitialized && dateTimeRangeIsInitialized && maxGuestsIsInitialized;
+    }
+
     private OperationResult CheckModifiableState()
     {
         return _status is ViaEventStatus.Active or ViaEventStatus.Cancelled

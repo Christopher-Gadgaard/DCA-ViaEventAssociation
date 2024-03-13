@@ -1,5 +1,8 @@
-﻿using UnitTests.Features.Event;
+﻿using UnitTests.Common.Utilities;
+using UnitTests.Features.Event;
+using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
+using Via.EventAssociation.Core.Domain.Common.Utilities.Interfaces;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
@@ -53,6 +56,10 @@ abstract class Program
             }
         }*/
         
+        
+        
+      
+    
         
         var viaEventId = ViaEventId.Create();
         var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
