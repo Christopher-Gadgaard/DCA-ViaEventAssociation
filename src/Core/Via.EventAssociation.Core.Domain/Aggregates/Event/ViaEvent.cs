@@ -162,6 +162,30 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         _visibility = ViaEventVisibility.Private;
         return OperationResult.Success();
     }
+    
+    public OperationResult SetMaxGuests(ViaMaxGuests maxGuests)
+    {
+        
+        if (_status is ViaEventStatus.Cancelled)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.BadRequest, "The event cannot be modified in its current state.")
+            });
+        }
+
+        if (_status is ViaEventStatus.Active && maxGuests.Value < _maxGuests.Value)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.BadRequest, "Cannot reduce max guests for an active event.")
+            });
+        }
+
+        _maxGuests = maxGuests;
+
+        return OperationResult.Success();
+    }
 
     private OperationResult TryReadyEvent()
     {

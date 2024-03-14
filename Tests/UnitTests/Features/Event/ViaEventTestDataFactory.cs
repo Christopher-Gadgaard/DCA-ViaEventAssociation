@@ -73,7 +73,7 @@ public class ViaEventTestDataFactory
         var maxGuestsResult = ViaMaxGuests.Create(maxGuests);
         if (maxGuestsResult.IsSuccess)
         {
-           // _event.UpdateMaxGuests(maxGuestsResult.Payload);
+           _event.SetMaxGuests(maxGuestsResult.Payload!);
         }
         return this;
     }
