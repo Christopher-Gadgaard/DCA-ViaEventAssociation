@@ -25,7 +25,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     internal new ViaEventId Id => base.Id;
     internal ViaEventTitle? Title => _title;
-    internal ViaEventDescription? Description => _description; 
+    internal ViaEventDescription? Description => _description;
     internal ViaDateTimeRange? DateTimeRange => _dateTimeRange;
     internal ViaMaxGuests MaxGuests => _maxGuests;
     internal ViaEventStatus Status => _status;
@@ -39,7 +39,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         ViaDateTimeRange? dateTimeRange = null,
         ViaMaxGuests? maxGuests = null,
         ViaEventStatus status = ViaEventStatus.Draft,
-        ViaEventVisibility visibility = ViaEventVisibility.Private, 
+        ViaEventVisibility visibility = ViaEventVisibility.Private,
         ITimeProvider? timeProvider = null)
         : base(id)
     {
@@ -60,26 +60,6 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     {
         _timeProvider = new SystemTimeProvider();
         return new ViaEvent(id);
-    }
-    
-    internal static OperationResult<ViaEvent> Create(ViaEventId id, ITimeProvider? timeProvider)
-    {
-        _timeProvider = timeProvider ?? new SystemTimeProvider();
-        return new ViaEvent(id, timeProvider: timeProvider);
-    }
-
-    internal static OperationResult<ViaEvent> Create(
-        ViaEventId id,
-        ViaEventTitle? title = null,
-        ViaEventDescription? description = null,
-        ViaDateTimeRange? dateTimeRange = null,
-        ViaMaxGuests? maxGuests = null,
-        ViaEventStatus status = ViaEventStatus.Draft,
-        ViaEventVisibility visibility = ViaEventVisibility.Private,
-        ITimeProvider? timeProvider = null)
-    {
-        var viaEvent = new ViaEvent(id, title, description, dateTimeRange, maxGuests, status, visibility, timeProvider);
-        return OperationResult<ViaEvent>.Success(viaEvent);
     }
 
     public OperationResult UpdateTitle(ViaEventTitle newTitle)
@@ -121,22 +101,35 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         return IfReadyRevertToDraft();
     }
 
-    internal OperationResult UpdateStatus(ViaEventStatus newStatus)
+    public OperationResult UpdateStatus(ViaEventStatus newStatus)
     {
         if (newStatus == ViaEventStatus.Cancelled)
         {
             return TryCancelEvent();
         }
 
-        return (_status, newStatus) switch
+        switch (_status, newStatus)
         {
-            (ViaEventStatus.Draft, ViaEventStatus.Ready) => TryReadyEvent(),
-            (ViaEventStatus.Ready, ViaEventStatus.Active) => TryActivateEvent(),
-            _ => OperationResult.Failure(new List<OperationError>
-            {
-                new(ErrorCode.BadRequest, $"Transitioning from '{_status}' to '{newStatus}' status is not supported.")
-            })
-        };
+            case (ViaEventStatus.Draft, ViaEventStatus.Ready):
+                return TryReadyEvent();
+
+            case (ViaEventStatus.Draft, ViaEventStatus.Active):
+                var readyResult = TryReadyEvent();
+                return !readyResult.IsSuccess ? readyResult : TryActivateEvent();
+
+            case (ViaEventStatus.Ready, ViaEventStatus.Active):
+                return TryActivateEvent();
+
+            case (ViaEventStatus.Active, ViaEventStatus.Active):
+                return OperationResult.Success();
+
+            default:
+                return OperationResult.Failure(new List<OperationError>
+                {
+                    new(ErrorCode.BadRequest,
+                        $"Transitioning from '{_status}' to '{newStatus}' status is not supported.")
+                });
+        }
     }
     
     public OperationResult MakePublic()
@@ -148,11 +141,11 @@ public class ViaEvent : AggregateRoot<ViaEventId>
                 new(ErrorCode.BadRequest, "The event cannot be modified in its current state.")
             });
         }
-        
+
         _visibility = ViaEventVisibility.Public;
         return OperationResult.Success();
     }
-    
+
     public OperationResult MakePrivate()
     {
         if (_status is ViaEventStatus.Cancelled or ViaEventStatus.Active)
@@ -162,14 +155,13 @@ public class ViaEvent : AggregateRoot<ViaEventId>
                 new(ErrorCode.BadRequest, "The event cannot be modified in its current state.")
             });
         }
-        
+
         _visibility = ViaEventVisibility.Private;
         return OperationResult.Success();
     }
-    
+
     public OperationResult SetMaxGuests(ViaMaxGuests maxGuests)
     {
-        
         if (_status is ViaEventStatus.Cancelled)
         {
             return OperationResult.Failure(new List<OperationError>
@@ -195,7 +187,9 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     {
         if (!IsEventDataComplete(out List<string> errorMessages))
         {
-            return OperationResult.Failure(new List<OperationError>(errorMessages.Select(message => new OperationError(ErrorCode.BadRequest, message))));
+            return OperationResult.Failure(
+                new List<OperationError>(errorMessages.Select(message =>
+                    new OperationError(ErrorCode.BadRequest, message))));
         }
 
         _status = ViaEventStatus.Ready;
@@ -227,13 +221,13 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         errorMessages = new List<string>();
         if (_title == null || _title.Value == DefaultTitle)
             errorMessages.Add("The title must be changed from the default.");
-        
+
         if (_description == null)
             errorMessages.Add("The description must be set.");
-        
+
         if (_dateTimeRange == null || _dateTimeRange.StartValue.AddSeconds(30) < _timeProvider.Now)
             errorMessages.Add("The start time cannot be in the past.");
-        
+
         if (_maxGuests == null)
             errorMessages.Add("The max guests must be set.");
 
@@ -257,7 +251,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
         return OperationResult.Success();
     }
-    
+
     private static DateTime AdjustStartTimeBasedOnBusinessRules(DateTime currentTime)
     {
         var targetStartTime = currentTime;
@@ -271,6 +265,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             // Set to next day at 08:00 if after 01:00 AM
             targetStartTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day).AddDays(1).AddHours(8);
         }
+
         return targetStartTime;
     }
 }
