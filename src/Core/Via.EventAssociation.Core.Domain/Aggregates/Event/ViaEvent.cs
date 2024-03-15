@@ -193,12 +193,9 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     private OperationResult TryReadyEvent()
     {
-        if (!IsEventDataComplete())
+        if (!IsEventDataComplete(out List<string> errorMessages))
         {
-            return OperationResult.Failure(new List<OperationError>
-            {
-                new(ErrorCode.BadRequest, "Event data is incomplete, cannot transition to Ready.")
-            });
+            return OperationResult.Failure(new List<OperationError>(errorMessages.Select(message => new OperationError(ErrorCode.BadRequest, message))));
         }
 
         _status = ViaEventStatus.Ready;
@@ -207,7 +204,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     private OperationResult TryActivateEvent()
     {
-        if (_timeProvider.Now >= _dateTimeRange!.StartValue)
+        if (_timeProvider.Now >= _dateTimeRange!.StartValue.AddSeconds(30))
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -225,14 +222,22 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         return OperationResult.Success();
     }
 
-    private bool IsEventDataComplete()
+    private bool IsEventDataComplete(out List<string> errorMessages)
     {
-        var titleIsInitialized = _title != null  && _title.Value != DefaultTitle;
-        var descriptionIsInitialized = _description != null;
-        var dateTimeRangeIsInitialized = _dateTimeRange != null;
-        var maxGuestsIsInitialized = _maxGuests != null;
+        errorMessages = new List<string>();
+        if (_title == null || _title.Value == DefaultTitle)
+            errorMessages.Add("The title must be changed from the default.");
+        
+        if (_description == null)
+            errorMessages.Add("The description must be set.");
+        
+        if (_dateTimeRange == null || _dateTimeRange.StartValue.AddSeconds(30) < _timeProvider.Now)
+            errorMessages.Add("The start time cannot be in the past.");
+        
+        if (_maxGuests == null)
+            errorMessages.Add("The max guests must be set.");
 
-        return titleIsInitialized && descriptionIsInitialized && dateTimeRangeIsInitialized && maxGuestsIsInitialized;
+        return errorMessages.Count == 0;
     }
 
     private OperationResult CheckModifiableState()

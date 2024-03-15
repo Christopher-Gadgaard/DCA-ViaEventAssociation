@@ -1,7 +1,9 @@
 ﻿using UnitTests.Common.Factories;
+using UnitTests.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
+using Via.EventAssociation.Core.Domain.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Common.Values;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
@@ -65,6 +67,12 @@ public class ViaEventTestDataFactory
         {
             _event.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
         }
+        return this;
+    }
+    
+    public ViaEventTestDataFactory WithDateTimeRange(ViaDateTimeRange dateTimeRange)
+    {
+        _event.UpdateDateTimeRange(dateTimeRange);
         return this;
     }
 
