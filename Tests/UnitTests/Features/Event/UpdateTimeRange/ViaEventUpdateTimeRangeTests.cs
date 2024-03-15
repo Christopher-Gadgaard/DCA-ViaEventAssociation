@@ -260,7 +260,7 @@ public class ViaEventUpdateTimeRangeTests
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
-            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title")
                 .WithStatus(ViaEventStatus.Active) // Set the event to Active status
                 .Build();
 

@@ -113,7 +113,7 @@ public abstract class ViaEventUpdateDescriptionTests
             // Arrange
             var viaEventId = ViaEventId.Create();
 
-            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title")
                 .WithDescription("Initial Description")
                 .WithStatus(ViaEventStatus.Active)
                 .Build();

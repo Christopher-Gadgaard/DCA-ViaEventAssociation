@@ -31,7 +31,7 @@ public abstract class ViaEventMakePublicTests
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
-            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithStatus(ViaEventStatus.Ready)
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title").WithStatus(ViaEventStatus.Ready)
                 .Build();
             Assert.Equal(ViaEventStatus.Ready, viaEvent.Status);
             Assert.Equal(ViaEventVisibility.Private, viaEvent.Visibility);
@@ -49,7 +49,7 @@ public abstract class ViaEventMakePublicTests
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
-            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithStatus(ViaEventStatus.Active)
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title").WithStatus(ViaEventStatus.Active)
                 .Build();
             Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
             Assert.Equal(ViaEventVisibility.Private, viaEvent.Visibility);

@@ -53,7 +53,7 @@ public class ViaEventReadyEventTests
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
-            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title")
                 .WithStatus(ViaEventStatus.Cancelled)
                 .Build();
             Assert.Equal(ViaEventStatus.Cancelled, viaEvent.Status);
@@ -63,7 +63,7 @@ public class ViaEventReadyEventTests
             
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Equal(ViaEventStatus.Ready, viaEvent.Status);
+            Assert.Equal(ViaEventStatus.Cancelled, viaEvent.Status);
         }
     }
 }

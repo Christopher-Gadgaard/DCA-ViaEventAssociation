@@ -21,10 +21,11 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     private List<ViaGuestId> _guests;
 
     private static ITimeProvider _timeProvider;
+    private const string DefaultTitle = "Working Title";
 
     internal new ViaEventId Id => base.Id;
     internal ViaEventTitle? Title => _title;
-    internal ViaEventDescription? Description => _description;
+    internal ViaEventDescription? Description => _description; 
     internal ViaDateTimeRange? DateTimeRange => _dateTimeRange;
     internal ViaMaxGuests MaxGuests => _maxGuests;
     internal ViaEventStatus Status => _status;
@@ -43,7 +44,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         : base(id)
     {
         _timeProvider = timeProvider ?? new SystemTimeProvider();
-        _title = title ?? ViaEventTitle.Create("Working Title").Payload;
+        _title = title ?? ViaEventTitle.Create(DefaultTitle).Payload;
         _description = description ?? ViaEventDescription.Create("").Payload;
         var validStartTime = AdjustStartTimeBasedOnBusinessRules(_timeProvider.Now);
         _dateTimeRange = dateTimeRange ?? ViaDateTimeRange
@@ -226,7 +227,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     private bool IsEventDataComplete()
     {
-        var titleIsInitialized = _title != null;
+        var titleIsInitialized = _title != null  && _title.Value != DefaultTitle;
         var descriptionIsInitialized = _description != null;
         var dateTimeRangeIsInitialized = _dateTimeRange != null;
         var maxGuestsIsInitialized = _maxGuests != null;
@@ -254,13 +255,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     
     private static DateTime AdjustStartTimeBasedOnBusinessRules(DateTime currentTime)
     {
-        // Assuming _timeProvider.Now returns UTC time
-        // Convert currentTime to the target timezone if necessary
-        // Check if currentTime is in the invalid range and adjust accordingly
-        // This is a simplistic approach; consider edge cases and specific business rules
-
         var targetStartTime = currentTime;
-        // Example adjustment logic (adjust according to actual business rules)
         if (currentTime.Hour < 8)
         {
             // Set to today at 08:00 if before 08:00 AM

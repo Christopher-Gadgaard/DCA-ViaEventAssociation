@@ -32,7 +32,7 @@ public abstract class ViaEventMakePrivateTests
             var viaEventId = ViaEventId.Create();
             
             // Act
-            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithStatus(ViaEventStatus.Ready)
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title").WithStatus(ViaEventStatus.Ready)
                 .Build();
             Assert.Equal(ViaEventVisibility.Private, viaEvent.Visibility);
             viaEvent.MakePrivate();
@@ -96,7 +96,7 @@ public abstract class ViaEventMakePrivateTests
             var viaEventId = ViaEventId.Create();
             
             // Act
-            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithStatus(ViaEventStatus.Active)
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title").WithStatus(ViaEventStatus.Active)
                 .Build();
             Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
             Assert.Equal(ViaEventVisibility.Private, viaEvent.Visibility);

@@ -43,7 +43,7 @@ public abstract class ViaEventSetMaxGuestsTests
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
-            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithMaxGuests(50)
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title").WithMaxGuests(50)
                 .WithStatus(ViaEventStatus.Ready)
                 .Build();
             Assert.Equal(50, viaEvent.MaxGuests.Value);
@@ -97,7 +97,7 @@ public abstract class ViaEventSetMaxGuestsTests
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
-            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithStatus(ViaEventStatus.Ready)
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title").WithStatus(ViaEventStatus.Ready)
                 .Build();
             Assert.Equal(5, viaEvent.MaxGuests.Value);
             Assert.Equal(ViaEventStatus.Ready, viaEvent.Status);
@@ -126,7 +126,7 @@ public abstract class ViaEventSetMaxGuestsTests
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
-            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithMaxGuests(initGuests)
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithMaxGuests(initGuests).WithTitle("Test Title")
                 .WithStatus(ViaEventStatus.Active)
                 .Build();
             Assert.Equal(initGuests, viaEvent.MaxGuests.Value);
@@ -154,7 +154,7 @@ public abstract class ViaEventSetMaxGuestsTests
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
-            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithMaxGuests(initGuests)
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithMaxGuests(initGuests).WithTitle("Test Title")
                 .WithStatus(ViaEventStatus.Active)
                 .Build();
             Assert.Equal(initGuests, viaEvent.MaxGuests.Value);
