@@ -1,5 +1,6 @@
 ﻿using Via.EventAssociation.Core.Domain.Common.Bases;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
+using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace Via.EventAssociation.Core.Domain.Aggregates.Guests;
 
@@ -20,7 +21,7 @@ public class ViaGuest:AggregateRoot<ViaGuestId>
         _viaEmail = viaEmail;
     }
     
-    public static ViaGuest Create(ViaGuestId viaGuestId, ViaGuestName viaGuestName, ViaEmail viaEmail)
+    public static OperationResult<ViaGuest> Create(ViaGuestId viaGuestId, ViaGuestName viaGuestName, ViaEmail viaEmail)
     {
         return new ViaGuest(viaGuestId, viaGuestName, viaEmail);
     }

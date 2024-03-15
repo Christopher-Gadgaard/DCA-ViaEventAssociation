@@ -26,9 +26,9 @@ public class CreateGuestTest
 
         // Assert
         Assert.NotNull(viaGuest);
-        Assert.Equal(guestId, viaGuest.Id);
-        Assert.Equal(viaGuestNameResult.Payload, viaGuest.ViaGuestName);
-        Assert.Equal(viaEmailResult.Payload, viaGuest.ViaEmail);
+        Assert.Equal(guestId, viaGuest.Payload.Id);
+        Assert.Equal(viaGuestNameResult.Payload, viaGuest.Payload.ViaGuestName);
+        Assert.Equal(viaEmailResult.Payload, viaGuest.Payload.ViaEmail);
     }
 
 
