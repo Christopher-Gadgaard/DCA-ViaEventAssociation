@@ -90,7 +90,7 @@ public class ViaDateTimeRange : ValueObject
 
     private static void ValidateStartTimeIsNotInThePast(DateTime startValue, ICollection<OperationError> errors)
     {
-        if (startValue < _timeProvider.Now)
+        if (startValue.AddSeconds(30) < _timeProvider.Now)
         {
             errors.Add(new OperationError(ErrorCode.BadRequest, "The start time cannot be in the past."));
         }

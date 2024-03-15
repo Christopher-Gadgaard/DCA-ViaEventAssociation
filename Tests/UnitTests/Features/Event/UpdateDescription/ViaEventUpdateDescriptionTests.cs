@@ -117,6 +117,7 @@ public abstract class ViaEventUpdateDescriptionTests
                 .WithDescription("Initial Description")
                 .WithStatus(ViaEventStatus.Active)
                 .Build();
+            Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
 
             var descriptionResult = ViaEventDescription.Create("New description");
             Assert.True(descriptionResult.IsSuccess);

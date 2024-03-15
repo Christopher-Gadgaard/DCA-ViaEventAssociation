@@ -4,5 +4,5 @@ namespace Via.EventAssociation.Core.Domain.Common.Utilities;
 
 public class SystemTimeProvider : ITimeProvider
 {
-    public DateTime Now => DateTime.UtcNow;
+    public DateTime Now => DateTime.UtcNow.ToLocalTime();
 }
