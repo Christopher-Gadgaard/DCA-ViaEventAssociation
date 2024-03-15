@@ -68,32 +68,32 @@
     * [x] F2
 
 
-* [ ] UC7 - Set Maximum Number of Guests
-    * [ ] Value - ViaMaxGuests
-    * [ ] S1
-    * [ ] S2
-    * [ ] S3
-    * [ ] F1
-    * [ ] F2
-    * [ ] F3
-    * [ ] F4
-    * [ ] F5
+* [x] UC7 - Set Maximum Number of Guests
+    * [x] Value - ViaMaxGuests
+    * [x] S1
+    * [x] S2
+    * [x] S3
+    * [x] F1
+    * [x] F2
+    * [x] F3
+    * [x] F4
+    * [x] F5
 
 
-* [ ] UC8 - Ready Event
-    * [ ] S1
-    * [ ] F1
-    * [ ] F2
-    * [ ] F3
-    * [ ] F4
+* [x] UC8 - Ready Event
+    * [x] S1
+    * [x] F1
+    * [x] F2
+    * [x] F3
+    * [x] F4
 
 
-* [ ] UC9 - Activate Event
-    * [ ] S1
-    * [ ] S2
-    * [ ] S3
-    * [ ] F1
-    * [ ] F2
+* [x] UC9 - Activate Event
+    * [x] S1
+    * [x] S2
+    * [x] S3
+    * [x] F1
+    * [x] F2
 
 
 * [ ] UC10 - Register Guest Account

@@ -1,4 +1,5 @@
-﻿using Via.EventAssociation.Core.Domain.Aggregates.Event;
+﻿using UnitTests.Common.Utilities;
+using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
@@ -16,6 +17,7 @@ public abstract class ViaEventCreationTests
                 Assert.True(eventId.IsSuccess);
         
                 // Act
+                
                 var result = ViaEvent.Create(eventId.Payload);
         
                 // Assert

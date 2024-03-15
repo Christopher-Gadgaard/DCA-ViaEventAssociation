@@ -11,6 +11,7 @@ public class ViaEventTestDataFactory
 {
     
    private ViaEvent _event;
+   public bool UseTestTimeProvider = false;
 
     private ViaEventTestDataFactory(ViaEventId id)
     {

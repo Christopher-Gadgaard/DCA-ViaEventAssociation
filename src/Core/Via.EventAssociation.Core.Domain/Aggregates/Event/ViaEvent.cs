@@ -20,7 +20,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     private ViaEventVisibility _visibility;
     private List<ViaGuestId> _guests;
 
-    private readonly ITimeProvider _timeProvider;
+    private static ITimeProvider _timeProvider;
 
     internal new ViaEventId Id => base.Id;
     internal ViaEventTitle? Title => _title;
@@ -45,9 +45,10 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         _timeProvider = timeProvider ?? new SystemTimeProvider();
         _title = title ?? ViaEventTitle.Create("Working Title").Payload;
         _description = description ?? ViaEventDescription.Create("").Payload;
+        var validStartTime = AdjustStartTimeBasedOnBusinessRules(_timeProvider.Now);
         _dateTimeRange = dateTimeRange ?? ViaDateTimeRange
-            .Create(DateTime.UtcNow.AddSeconds(30), DateTime.UtcNow.AddSeconds(30).AddHours(1))
-            .Payload; //TODO: ASK TROELS ABOUT THIS
+            .Create(validStartTime, validStartTime.AddHours(1))
+            .Payload;
         _maxGuests = maxGuests ?? ViaMaxGuests.Create(5).Payload;
         _status = status;
         _visibility = visibility;
@@ -56,11 +57,13 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     public static OperationResult<ViaEvent> Create(ViaEventId id)
     {
+        _timeProvider = new SystemTimeProvider();
         return new ViaEvent(id);
     }
     
-    internal static OperationResult<ViaEvent> Create(ViaEventId id, ITimeProvider timeProvider)
+    internal static OperationResult<ViaEvent> Create(ViaEventId id, ITimeProvider? timeProvider)
     {
+        _timeProvider = timeProvider ?? new SystemTimeProvider();
         return new ViaEvent(id, timeProvider: timeProvider);
     }
 
@@ -117,7 +120,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         return IfReadyRevertToDraft();
     }
 
-    public OperationResult UpdateStatus(ViaEventStatus newStatus)
+    internal OperationResult UpdateStatus(ViaEventStatus newStatus)
     {
         if (newStatus == ViaEventStatus.Cancelled)
         {
@@ -247,5 +250,27 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         }
 
         return OperationResult.Success();
+    }
+    
+    private static DateTime AdjustStartTimeBasedOnBusinessRules(DateTime currentTime)
+    {
+        // Assuming _timeProvider.Now returns UTC time
+        // Convert currentTime to the target timezone if necessary
+        // Check if currentTime is in the invalid range and adjust accordingly
+        // This is a simplistic approach; consider edge cases and specific business rules
+
+        var targetStartTime = currentTime;
+        // Example adjustment logic (adjust according to actual business rules)
+        if (currentTime.Hour < 8)
+        {
+            // Set to today at 08:00 if before 08:00 AM
+            targetStartTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 8, 0, 0);
+        }
+        else if (currentTime.Hour >= 1 && currentTime.AddSeconds(30).Day > currentTime.Day)
+        {
+            // Set to next day at 08:00 if after 01:00 AM
+            targetStartTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day).AddDays(1).AddHours(8);
+        }
+        return targetStartTime;
     }
 }
