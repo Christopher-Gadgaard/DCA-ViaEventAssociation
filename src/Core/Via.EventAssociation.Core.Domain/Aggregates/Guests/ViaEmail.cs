@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Via.EventAssociation.Core.Domain.Common.Bases;
+using Via.EventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
@@ -15,16 +16,23 @@ public class ViaEmail:ValueObject
         Validate(value);
     }
     
-    public static OperationResult<ViaEmail> Create(string email)
+    public static  OperationResult<ViaEmail> Create(string email, ICheckEmailInUse checkEmailInUse)
     {
         var validation = Validate(email);
-        if (validation.IsSuccess)
+        if (!validation.IsSuccess)
         {
-            return new ViaEmail(email);
+            return OperationResult<ViaEmail>.Failure(validation.OperationErrors);
         }
 
-        return validation.OperationErrors;
+        bool isEmailInUse =  checkEmailInUse.IsEmailRegistered(email);
+        if (isEmailInUse)
+        {
+            return OperationResult<ViaEmail>.Failure(new List<OperationError> { new OperationError(ErrorCode.InvalidInput, "Email is already in use.") });
+        }
+
+        return OperationResult<ViaEmail>.Success(new ViaEmail(email));
     }
+
     
     private static OperationResult<string> Validate(string email)
     {

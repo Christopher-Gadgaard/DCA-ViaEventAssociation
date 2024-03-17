@@ -10,4 +10,8 @@
       <Folder Include="Assignment2\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Moq" Version="4.20.70" />
+    </ItemGroup>
+
 </Project>

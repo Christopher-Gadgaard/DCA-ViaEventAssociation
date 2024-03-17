@@ -1,185 +1,131 @@
-﻿using Via.EventAssociation.Core.Domain.Aggregates.Guests;
+﻿using Moq;
+using Xunit;
+using System.Linq;
+using Via.EventAssociation.Core.Domain.Aggregates.Guests;
+using Via.EventAssociation.Core.Domain.Contracts;
+using ViaEventAssociation.Core.Tools.OperationResult;
 
 namespace UnitTests.Features.Location.Values;
 
 public class ViaEmailTests
 {
     [Fact]
-
-    public void Create_ShouldReturnFail()
+    public void Create_ShouldReturnFailureWhenEmailIsAlreadyRegistered()
     {
-        // Arrange
-        var validEmail = "valid_mail@via.dk";
-
-        // Act
-        var result = ViaEmail.Create(validEmail);
-
-        // Assert
-        Assert.False(result.IsSuccess);
+        var validEmail = "mail@via.dk";
+        var emailCheckerMock = new Mock<ICheckEmailInUse>();
+        emailCheckerMock.Setup(service => service.IsEmailRegistered(validEmail)).Returns(false);
+        var result = ViaEmail.Create(validEmail, emailCheckerMock.Object);
+        Assert.True(result.IsSuccess);
     }
 
     [Fact]
-
     public void Create_ShouldReturnFailureWhenEmpty()
     {
-        // Arrange
-        var emptyEmail = ViaEmail.Create("");
-
-        // Act
-        var result = emptyEmail;
-
-        // Assert
+        var email = "";
+        var emailCheckerMock = new Mock<ICheckEmailInUse>();
+        emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
+        var result = ViaEmail.Create(email, emailCheckerMock.Object);
         Assert.True(result.OperationErrors.Any());
     }
 
     [Fact]
-
     public void Create_ShouldReturnFailureWhenInvalid()
     {
-        // Arrange
-        var invalidEmail = ViaEmail.Create("invalid_mail");
-
-        // Act
-        var result = invalidEmail;
-
-        // Assert
+        var email = "invalid_mail";
+        var emailCheckerMock = new Mock<ICheckEmailInUse>();
+        emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
+        var result = ViaEmail.Create(email, emailCheckerMock.Object);
         Assert.True(result.OperationErrors.Any());
     }
 
     [Fact]
-
     public void Create_ShouldReturnFailureWhenNull()
     {
-        // Arrange
-        var nullEmail = ViaEmail.Create(null);
-
-        // Act
-        var result = nullEmail;
-
-        // Assert
+        var emailCheckerMock = new Mock<ICheckEmailInUse>();
+        emailCheckerMock.Setup(service => service.IsEmailRegistered(null)).Returns(false);
+        var result = ViaEmail.Create(null, emailCheckerMock.Object);
         Assert.True(result.OperationErrors.Any());
     }
 
     [Fact]
-
     public void Create_ShouldReturnFailureWhenTooLong()
     {
-        // Arrange
-        var tooLongEmail = ViaEmail.Create("waytoolongemailaddressplaceholderstuffforsize@via.dk");
-
-        // Act
-        var result = tooLongEmail;
-
-        // Assert
+        var emailCheckerMock = new Mock<ICheckEmailInUse>();
+        emailCheckerMock.Setup(service => service.IsEmailRegistered("waytoolongemailaddressplaceholderstuffforsize@via.dk")).Returns(false);
+        var result = ViaEmail.Create("waytoolongemailaddressplaceholderstuffforsize@via.dk", emailCheckerMock.Object);
         Assert.True(result.OperationErrors.Any());
     }
 
     [Fact]
-
     public void Create_ShouldReturnFailureWhenTooShort()
     {
-        // Arrange
-        var tooShortEmail = ViaEmail.Create("a@b");
-
-        // Act
-        var result = tooShortEmail;
-
-        // Assert
+        var emailCheckerMock = new Mock<ICheckEmailInUse>();
+        emailCheckerMock.Setup(service => service.IsEmailRegistered("a@b")).Returns(false);
+        var result = ViaEmail.Create("a@b", emailCheckerMock.Object);
         Assert.True(result.OperationErrors.Any());
     }
 
     [Fact]
-
     public void Create_ShouldReturnFailureWhenInvalidDomain()
     {
-        // Arrange
-        var invalidDomainEmail = ViaEmail.Create("vlad@vea.dk");
-
-        // Act
-        var result = invalidDomainEmail;
-
-        // Assert
-
+        var emailCheckerMock = new Mock<ICheckEmailInUse>();
+        emailCheckerMock.Setup(service => service.IsEmailRegistered("vlad@vea.dk")).Returns(false);
+        var result = ViaEmail.Create("vlad@vea.dk", emailCheckerMock.Object);
         Assert.True(result.OperationErrors.Any());
     }
 
     [Fact]
-
     public void ShouldReturnSuccess_WhenEmailIsValid()
     {
-        // Arrange
-        const string validEmail = "308826@via.dk";
-
-        // Act
-        var result = ViaEmail.Create(validEmail);
-
-        // Assert
+        var emailCheckerMock = new Mock<ICheckEmailInUse>();
+        emailCheckerMock.Setup(service => service.IsEmailRegistered("308826@via.dk")).Returns(false);
+        var result = ViaEmail.Create("308826@via.dk", emailCheckerMock.Object);
         Assert.True(result.IsSuccess);
-
     }
 
     [Fact]
-
     public void ShouldReturnFailure_WhenEmailIsInvalid()
     {
-        // Arrange
-        const string invalidEmail = "AB1234@via.dk";
-
-        // Act
-        var result = ViaEmail.Create(invalidEmail);
-
-        // Assert
+        var emailCheckerMock = new Mock<ICheckEmailInUse>();
+        emailCheckerMock.Setup(service => service.IsEmailRegistered("AB1234@via.dk")).Returns(false);
+        var result = ViaEmail.Create("AB1234@via.dk", emailCheckerMock.Object);
         Assert.True(result.OperationErrors.Any());
     }
 
     [Fact]
-
     public void ShouldReturnFailure_WhenEmailIsInvalid2()
     {
-        // Arrange
-        const string invalidEmail = "308826@via.md";
-
-        // Act
-        var result = ViaEmail.Create(invalidEmail);
-
-        // Assert
+        var emailCheckerMock = new Mock<ICheckEmailInUse>();
+        emailCheckerMock.Setup(service => service.IsEmailRegistered("308826@via.md")).Returns(false);
+        var result = ViaEmail.Create("308826@via.md", emailCheckerMock.Object);
         Assert.True(result.OperationErrors.Any());
     }
 
     [Fact]
-
     public void ShouldReturnFailure_WhenEmailIsInvalid3()
     {
-        // Arrange
-        const string invalidEmail = "308826@VIA.DK";
-        // Act
-        var result = ViaEmail.Create(invalidEmail);
-
-        // Assert
+        var emailCheckerMock = new Mock<ICheckEmailInUse>();
+        emailCheckerMock.Setup(service => service.IsEmailRegistered("308826@VIA.DK")).Returns(false);
+        var result = ViaEmail.Create("308826@VIA.DK", emailCheckerMock.Object);
         Assert.True(result.OperationErrors.Any());
     }
 
     [Fact]
     public void ShouldReturnSuccess_OnCapitalLetters()
     {
-        // Arrange
-        const string validEmail = "VLAD@via.dk";
-
-        // Act
-        var result = ViaEmail.Create(validEmail);
-
-        // Assert
+        var emailCheckerMock = new Mock<ICheckEmailInUse>();
+        emailCheckerMock.Setup(service => service.IsEmailRegistered("VLAD@via.dk")).Returns(false);
+        var result = ViaEmail.Create("VLAD@via.dk", emailCheckerMock.Object);
         Assert.True(result.IsSuccess);
     }
 
     [Fact]
     public void ShouldFail_WhenEmailIsInvalid()
     {
-        // Arrange
-        const string invalidEmail = "john@gmail.com";
-        // Act
-        var result = ViaEmail.Create(invalidEmail);
-        // Assert
+        var emailCheckerMock = new Mock<ICheckEmailInUse>();
+        emailCheckerMock.Setup(service => service.IsEmailRegistered("john@gmail.com")).Returns(false);
+        var result = ViaEmail.Create("john@gmail.com", emailCheckerMock.Object);
         Assert.False(result.IsSuccess);
     }
 }
