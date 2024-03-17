@@ -7,6 +7,8 @@
     &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.Participate.GuestParticipatesToPublicEventTest.Guest_Participation_Fails_When_Event_Is_Full&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.Participate.GuestParticipatesToPublicEventTest.Guest_Participation_Fails_When_Event_Is_In_Draft_State&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.Participate.GuestParticipatesToPublicEventTest.Guest_Participation_Fails_When_Event_Start_Time_Is_In_The_Past&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.CancelParticipation.GuestCancelsEventParticipationTest.Guest_Removes_Participation_From_Public_Event_Successfully&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.CancelParticipation.GuestCancelsEventParticipationTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8ef02708_002D6229_002D4526_002D9eca_002Dfa0fd9a67b2d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Create_WithInvalidLastName_ShouldFail" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;

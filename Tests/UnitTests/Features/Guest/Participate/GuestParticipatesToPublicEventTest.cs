@@ -252,7 +252,6 @@ public class GuestParticipatesToPublicEventTest
 
         viaEvent.UpdateDateTimeRange(dateTimeRange.Payload);
         
-        viaEvent.UpdateStatus(ViaEventStatus.Active);
         
         var result = viaEvent.AddParticipant(guestId);
         //should default to the current time and success

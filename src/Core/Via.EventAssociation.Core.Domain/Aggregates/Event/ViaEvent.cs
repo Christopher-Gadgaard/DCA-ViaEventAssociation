@@ -295,6 +295,12 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     public OperationResult RemoveParticipant(ViaGuestId guestId)
     {
+        // Check if the event has already started or is ongoing
+        if (_dateTimeRange.StartValue <= _timeProvider.Now)
+        {
+            return OperationResult.Failure(new List<OperationError> { new OperationError(ErrorCode.BadRequest, "Cannot remove participation from past or ongoing events.") });
+        }
+
         if (!IsParticipant(guestId))
         {
             return OperationResult.Failure(new List<OperationError> { new OperationError(ErrorCode.NotFound, "The guest is not a participant of this event.") });

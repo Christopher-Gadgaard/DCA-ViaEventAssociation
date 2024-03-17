@@ -116,10 +116,10 @@
     * [X] F5
 
 
-* [ ] UC12 - Guest Cancels Event Participation
-    * [ ] S1
-    * [ ] S2
-    * [ ] F1
+* [X] UC12 - Guest Cancels Event Participation
+    * [X] S1
+    * [X] S2
+    * [X] F1
 
 
 * [ ] UC13 - Guest is Invited to Event
