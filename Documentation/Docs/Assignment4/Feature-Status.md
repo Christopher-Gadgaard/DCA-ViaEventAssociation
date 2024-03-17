@@ -96,15 +96,15 @@
     * [x] F2
 
 
-* [ ] UC10 - Register Guest Account
-    * [ ] S1
-    * [ ] F1
-    * [ ] F2
-    * [ ] F3
-    * [ ] F4
+* [X] UC10 - Register Guest Account
+    * [X] S1
+    * [X] F1
+    * [X] F2
+    * [X] F3
+    * [X] F4
     * [ ] F5
-    * [ ] F6
-    * [ ] F7
+    * [X] F6
+    * [X] F7
 
 
 * [ ] UC11 - Guest Participates Public Event

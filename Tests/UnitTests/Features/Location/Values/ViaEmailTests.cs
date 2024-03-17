@@ -171,4 +171,15 @@ public class ViaEmailTests
         // Assert
         Assert.True(result.IsSuccess);
     }
+
+    [Fact]
+    public void ShouldFail_WhenEmailIsInvalid()
+    {
+        // Arrange
+        const string invalidEmail = "john@gmail.com";
+        // Act
+        var result = ViaEmail.Create(invalidEmail);
+        // Assert
+        Assert.False(result.IsSuccess);
+    }
 }

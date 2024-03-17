@@ -21,9 +21,23 @@ public class ViaGuest:AggregateRoot<ViaGuestId>
         _viaEmail = viaEmail;
     }
     
-    public static OperationResult<ViaGuest> Create(ViaGuestId viaGuestId, ViaGuestName viaGuestName, ViaEmail viaEmail)
+    public static OperationResult<ViaGuest> Create(ViaGuestId viaGuestId, OperationResult<ViaGuestName> viaGuestNameResult, OperationResult<ViaEmail> viaEmailResult)
     {
-        return new ViaGuest(viaGuestId, viaGuestName, viaEmail);
+      
+        if (!viaGuestNameResult.IsSuccess)
+        {
+            return OperationResult<ViaGuest>.Failure(viaGuestNameResult.OperationErrors);
+        }
+
+    
+        if (!viaEmailResult.IsSuccess)
+        {
+            return OperationResult<ViaGuest>.Failure(viaEmailResult.OperationErrors);
+        }
+
+
+        var guest = new ViaGuest(viaGuestId, viaGuestNameResult.Payload, viaEmailResult.Payload);
+        return OperationResult<ViaGuest>.Success(guest);
     }
     
 }
