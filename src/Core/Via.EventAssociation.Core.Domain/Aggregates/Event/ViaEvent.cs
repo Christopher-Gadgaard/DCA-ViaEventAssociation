@@ -268,4 +268,51 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
         return targetStartTime;
     }
+    
+    public OperationResult AddParticipant(ViaGuestId guestId)
+    {
+        if (_status != ViaEventStatus.Active)
+        {
+            return OperationResult.Failure(new List<OperationError> { new OperationError(ErrorCode.BadRequest, "Participants can only be added to active events.") });
+        }
+        if (_visibility != ViaEventVisibility.Public)
+        {
+            return OperationResult.Failure(new List<OperationError> { new OperationError(ErrorCode.BadRequest, "Participants can only be added to public events.") });
+        }
+        if (IsFull())
+        {
+            return OperationResult.Failure(new List<OperationError> { new OperationError(ErrorCode.Conflict, "The event is full.") });
+        }
+
+        if (IsParticipant(guestId))
+        {
+            return OperationResult.Failure(new List<OperationError> { new OperationError(ErrorCode.BadRequest, "The guest is already a participant.") });
+        }
+
+        _guests.Add(guestId);
+        return OperationResult.Success();
+    }
+
+    public OperationResult RemoveParticipant(ViaGuestId guestId)
+    {
+        if (!IsParticipant(guestId))
+        {
+            return OperationResult.Failure(new List<OperationError> { new OperationError(ErrorCode.NotFound, "The guest is not a participant of this event.") });
+        }
+
+        _guests.Remove(guestId);
+        return OperationResult.Success();
+    }
+
+    
+    private bool IsFull()
+    {
+        return _guests.Count >= _maxGuests.Value;
+    }
+    
+    public bool IsParticipant(ViaGuestId guestId)
+    {
+        return _guests.Contains(guestId);
+    }
+
 }

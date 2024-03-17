@@ -179,7 +179,7 @@ public class CreateGuestTest
         public void Create_WithEmailAlreadyRegistered_ShouldFail()
         {
             // Arrange
-             var email = "alreadyregistered@via.dk";
+             var email = "john@via.dk";
             var emailCheckerMock = new Mock<ICheckEmailInUse>();
             emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(true);
             

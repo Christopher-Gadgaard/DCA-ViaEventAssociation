@@ -23,7 +23,7 @@ public class ViaLocationCapacity :ValueObject
         }
         return validation.OperationErrors;
     }
-    public static OperationResult<int> Validate(int capacity)
+    private static OperationResult<int> Validate(int capacity)
     {
         if (capacity <=0)
         {
@@ -39,6 +39,6 @@ public class ViaLocationCapacity :ValueObject
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return Value;
     }
 }

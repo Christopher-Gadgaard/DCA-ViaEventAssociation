@@ -19,6 +19,6 @@ public class ViaGuestId :ViaId
     
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return Value;
     }
 }
