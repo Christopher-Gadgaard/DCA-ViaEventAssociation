@@ -64,10 +64,11 @@ public class InvitationRequestIsAccepted
 
         var viaEvent = eventResult.Payload;
 
-        if (viaEvent.Status != ViaEventStatus.Ready)
+        if (viaEvent.Status != ViaEventStatus.Ready || viaEvent.Status != ViaEventStatus.Active)
+      
         {
             return OperationResult.Failure(new List<OperationError>()
-                { new OperationError(ErrorCode.Conflict, "The event is not in a ready state.") });
+                { new OperationError(ErrorCode.Conflict, "Cant accept invitation request. The event is not in a ready or active state.") });
         }
 
         if (viaEvent.Visibility == ViaEventVisibility.Private)

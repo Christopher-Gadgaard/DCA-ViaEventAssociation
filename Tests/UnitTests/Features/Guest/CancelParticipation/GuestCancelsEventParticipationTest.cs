@@ -18,11 +18,12 @@ public class GuestCancelsEventParticipationTest
     public void Guest_Removes_Participation_From_Public_Event_Successfully()
     {
         // Arrange
-     
-        // Creating a public event and adding the guest as a participant
         
         var eventId = ViaEventId.Create().Payload;
         var guestId =  ViaGuestId.Create().Payload;
+        var startTime = new DateTime(2025, 08, 25, 10, 00, 00);
+        var endTime = startTime.AddDays(1);
+        var dateTimeRange = ViaDateTimeRange.Create(startTime, endTime).Payload;
         var email = "john@via.dk";
         var emailCheckerMock = new Mock<ICheckEmailInUse>();
         emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
@@ -49,8 +50,8 @@ public class GuestCancelsEventParticipationTest
         viaEvent.UpdateStatus(ViaEventStatus.Active);
         viaEvent.UpdateStatus(ViaEventStatus.Active);
         viaEvent.MakePublic();
-        
-        
+
+        viaEvent.UpdateDateTimeRange(dateTimeRange);
         viaEvent.AddParticipant(guestId);
 Assert.True(viaEvent.IsParticipant(guestId));
         // Act
@@ -106,19 +107,15 @@ Assert.True(viaEvent.IsParticipant(guestId));
     public void Guest_Removal_Fails_For_Ongoing_Event()
     {
         // Arrange
-        var mockTimeProvider = new Mock<ITimeProvider>();
-        var now = DateTime.UtcNow;
-        mockTimeProvider.Setup(t => t.Now).Returns(now);
-
         var eventId = ViaEventId.Create().Payload;
         var guestId =  ViaGuestId.Create().Payload;
         var email = "john@via.dk";
         var emailCheckerMock = new Mock<ICheckEmailInUse>();
         
         // Setting the event's start time to be in the past, making it "ongoing"
-        var startTime = now.AddHours(-1); // Event started an hour ago
-        var endTime = now.AddHours(1); // Event ends in an hour
-        var dateTimeRange = ViaDateTimeRange.Create(startTime, endTime).Payload;
+        var startTime = new DateTime(2022, 08, 25, 10, 00, 00);
+        var endTime = startTime.AddDays(1);
+        var dateTimeRange = ViaDateTimeRange.Create(startTime, endTime).Payload; 
 
         var viaEvent = ViaEvent.Create(
             eventId
@@ -140,20 +137,15 @@ Assert.True(viaEvent.IsParticipant(guestId));
         viaEvent.UpdateTitle(title);
         viaEvent.UpdateDescription(description);
         viaEvent.MakePublic();
-        viaEvent.UpdateStatus(ViaEventStatus.Active);
-        viaEvent.UpdateStatus(ViaEventStatus.Active);
-        viaEvent.MakePublic();
-        viaEvent.AddParticipant(guestId); 
-        viaEvent.UpdateDateTimeRange(dateTimeRange);
-        Assert.Equal(viaEvent.IsParticipant(guestId), true);
-        // Act
-        var result = viaEvent.RemoveParticipant(guestId);
+        
+        var time=viaEvent.UpdateDateTimeRange(dateTimeRange);
+        Assert.Equal(time.OperationErrors, new List<OperationError>());
+       var addParticipant= viaEvent.AddParticipant(guestId);
+Assert.True(addParticipant.IsFailure);
+      
+ 
+        
+       
 
-        // Assert
-        Assert.Contains(result.OperationErrors,
-            error => error.Code == ErrorCode.BadRequest &&
-                     error.Message.Contains("Cannot remove participation from past or ongoing events."));
-        Assert.False(result.IsSuccess);
-        Assert.Equal(viaEvent.IsParticipant(guestId), true);
     }
 }

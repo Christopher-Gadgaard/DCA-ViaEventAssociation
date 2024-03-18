@@ -1,16 +1,5 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1d69115d_002Ddfaa_002D45a5_002D9efd_002D8d64c30bb91a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Guest_Participation_Fails_When_Event_Is_Private" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.Participate.GuestParticipatesToPublicEventTest.Guest_Participation_Fails_When_Event_Is_Private&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.Participate.GuestParticipatesToPublicEventTest.Guest_Participation_Fails_When_Already_A_Participant&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.Participate.GuestParticipatesToPublicEventTest.Guest_Participation_Fails_When_Event_Is_Canceled&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.Participate.GuestParticipatesToPublicEventTest.Guest_Participation_Fails_When_Event_Is_Full&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.Participate.GuestParticipatesToPublicEventTest.Guest_Participation_Fails_When_Event_Is_In_Draft_State&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.Participate.GuestParticipatesToPublicEventTest.Guest_Participation_Fails_When_Event_Start_Time_Is_In_The_Past&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.CancelParticipation.GuestCancelsEventParticipationTest.Guest_Removes_Participation_From_Public_Event_Successfully&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.CancelParticipation.GuestCancelsEventParticipationTest&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8ef02708_002D6229_002D4526_002D9eca_002Dfa0fd9a67b2d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Create_WithInvalidLastName_ShouldFail" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.Register.CreateGuestTest&lt;/TestId&gt;&#xD;
@@ -18,7 +7,7 @@
     &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.Participate.GuestParticipatesToPublicEventTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=965cd656_002D0f72_002D454a_002D83e8_002Df07462759eab/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=965cd656_002D0f72_002D454a_002D83e8_002Df07462759eab/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	

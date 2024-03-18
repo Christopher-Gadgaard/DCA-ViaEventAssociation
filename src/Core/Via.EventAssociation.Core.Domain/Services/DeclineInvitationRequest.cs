@@ -63,16 +63,17 @@ public class DeclineInvitationRequest
 
         var viaEvent = eventResult.Payload;
 
-        if (viaEvent.Status != ViaEventStatus.Ready)
+        if (viaEvent.Status != ViaEventStatus.Ready || viaEvent.Status != ViaEventStatus.Active)
         {
             return OperationResult.Failure(new List<OperationError>()
-                { new OperationError(ErrorCode.Conflict, "The event is not in a ready state.") });
+                { new OperationError(ErrorCode.Conflict, "Cant decline invitation; The event is not in a ready or active state.") });
         }
+    
 
-        if (viaEvent.Visibility == ViaEventVisibility.Private)
+        if (viaEvent.Visibility != ViaEventVisibility.Private)
         {
             return OperationResult.Failure(new List<OperationError>()
-                { new OperationError(ErrorCode.Conflict, "The event is private.") });
+                { new OperationError(ErrorCode.Conflict, "The event is not private.") });
         }
 
         return OperationResult.Success();

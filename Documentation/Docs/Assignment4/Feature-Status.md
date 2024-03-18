@@ -122,10 +122,10 @@
     * [X] F1
 
 
-* [ ] UC13 - Guest is Invited to Event
-    * [ ] S1
-    * [ ] F1
-    * [ ] F2
+* [X] UC13 - Guest is Invited to Event
+    * [X] S1
+    * [X] F1
+    * [X] F2
 
 
 * [ ] UC14 - Guest Accepts Invitation
