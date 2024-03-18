@@ -136,9 +136,9 @@
     * [X] F4
 
 
-* [ ] UC15 - Guest Declines Invitation
-    * [ ] S1
-    * [ ] S2
-    * [ ] F1
-    * [ ] F2
-    * [ ] F3
+* [X] UC15 - Guest Declines Invitation
+    * [X] S1
+    * [X] S2
+    * [X] F1
+    * [X] F2
+    * [X] F3
