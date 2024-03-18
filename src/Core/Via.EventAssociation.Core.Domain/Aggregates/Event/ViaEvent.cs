@@ -131,7 +131,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
                 });
         }
     }
-    
+
     public OperationResult MakePublic()
     {
         if (_status == ViaEventStatus.Cancelled)
@@ -238,7 +238,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     {
         return _status is ViaEventStatus.Active or ViaEventStatus.Cancelled
             ? OperationResult.Failure(new List<OperationError>
-                {new(ErrorCode.BadRequest, "The event cannot be modified in its current state.")})
+                { new(ErrorCode.BadRequest, "The event cannot be modified in its current state.") })
             : OperationResult.Success();
     }
 
@@ -268,25 +268,31 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
         return targetStartTime;
     }
-    
+
     public OperationResult AddParticipant(ViaGuestId guestId)
     {
         if (_status != ViaEventStatus.Active)
         {
-            return OperationResult.Failure(new List<OperationError> { new OperationError(ErrorCode.BadRequest, "Participants can only be added to active events.") });
+            return OperationResult.Failure(new List<OperationError>
+                { new OperationError(ErrorCode.BadRequest, "Participants can only be added to active events.") });
         }
+
         if (_visibility != ViaEventVisibility.Public)
         {
-            return OperationResult.Failure(new List<OperationError> { new OperationError(ErrorCode.BadRequest, "Participants can only be added to public events.") });
+            return OperationResult.Failure(new List<OperationError>
+                { new OperationError(ErrorCode.BadRequest, "Participants can only be added to public events.") });
         }
+
         if (IsFull())
         {
-            return OperationResult.Failure(new List<OperationError> { new OperationError(ErrorCode.Conflict, "The event is full.") });
+            return OperationResult.Failure(new List<OperationError>
+                { new OperationError(ErrorCode.Conflict, "The event is full.") });
         }
 
         if (IsParticipant(guestId))
         {
-            return OperationResult.Failure(new List<OperationError> { new OperationError(ErrorCode.BadRequest, "The guest is already a participant.") });
+            return OperationResult.Failure(new List<OperationError>
+                { new OperationError(ErrorCode.BadRequest, "The guest is already a participant.") });
         }
 
         _guests.Add(guestId);
@@ -295,33 +301,35 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     public OperationResult RemoveParticipant(ViaGuestId guestId)
     {
-        if (_dateTimeRange.StartValue <= DateTime.Now && DateTime.Now <= _dateTimeRange.EndValue)
-        {
-            return OperationResult.Failure(new List<OperationError> { new OperationError(ErrorCode.BadRequest, "Cannot remove participation from ongoing or past events.") });
-        }
-
-
         if (!IsParticipant(guestId))
         {
-            return OperationResult.Failure(new List<OperationError> 
-            { 
-                new OperationError(ErrorCode.NotFound, "The guest is not a participant of this event.") 
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new OperationError(ErrorCode.NotFound, "The guest is not a participant of this event.")
             });
         }
+
+        if (_dateTimeRange.StartValue <= DateTime.Now )
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new OperationError(ErrorCode.BadRequest, "Cannot remove participation from ongoing or past events.")
+            });
+        }
+
 
         _guests.Remove(guestId);
         return OperationResult.Success();
     }
 
-    
+
     public bool IsFull()
     {
         return _guests.Count >= _maxGuests.Value;
     }
-    
+
     public bool IsParticipant(ViaGuestId guestId)
     {
         return _guests.Contains(guestId);
     }
-
 }

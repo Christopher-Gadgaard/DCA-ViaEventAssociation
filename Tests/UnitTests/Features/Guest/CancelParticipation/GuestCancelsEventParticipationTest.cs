@@ -18,11 +18,11 @@ public class GuestCancelsEventParticipationTest
     public void Guest_Removes_Participation_From_Public_Event_Successfully()
     {
         // Arrange
-        
+
         var eventId = ViaEventId.Create().Payload;
-        var guestId =  ViaGuestId.Create().Payload;
-        var startTime = new DateTime(2025, 08, 25, 10, 00, 00);
-        var endTime = startTime.AddDays(1);
+        var guestId = ViaGuestId.Create().Payload;
+        var startTime = new DateTime(2024, 08, 25, 10, 00, 00);
+        var endTime = startTime.AddHours(2);
         var dateTimeRange = ViaDateTimeRange.Create(startTime, endTime).Payload;
         var email = "john@via.dk";
         var emailCheckerMock = new Mock<ICheckEmailInUse>();
@@ -42,29 +42,31 @@ public class GuestCancelsEventParticipationTest
         var locationName = ViaLocationName.Create("Location Name").Payload;
         var locationCapacity = ViaLocationCapacity.Create(20).Payload;
         
-        var location = ViaLocation.Create(locationId,locationName,locationCapacity).Payload;
+        var location = ViaLocation.Create(locationId, locationName, locationCapacity).Payload;
         viaEvent.SetMaxGuests(maxGuests);
         viaEvent.UpdateTitle(title);
         viaEvent.UpdateDescription(description);
+        viaEvent.UpdateDateTimeRange(dateTimeRange);
         viaEvent.UpdateStatus(ViaEventStatus.Active);
         viaEvent.MakePublic();
-
-        viaEvent.UpdateDateTimeRange(dateTimeRange);
+        Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
         viaEvent.AddParticipant(guestId);
-Assert.True(viaEvent.IsParticipant(guestId));
+        Assert.True(viaEvent.IsParticipant(guestId));
         // Act
         var result = viaEvent.RemoveParticipant(guestId);
-
         // Assert
+        Assert.Equal(result.OperationErrors, new List<OperationError>());
         Assert.True(result.IsSuccess);
         Assert.False(viaEvent.IsParticipant(guestId));
     }
+
     [Fact]
     public void Guest_Removal_Does_Nothing_When_Not_A_Participant()
     {
         var eventId = ViaEventId.Create().Payload;
-        var guestId =  ViaGuestId.Create().Payload;
+        var guestId = ViaGuestId.Create().Payload;
         var email = "john@via.dk";
+        
         var emailCheckerMock = new Mock<ICheckEmailInUse>();
         emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
         var viaEvent = ViaEvent.Create(
@@ -81,8 +83,8 @@ Assert.True(viaEvent.IsParticipant(guestId));
         var locationId = ViaLocationId.Create().Payload;
         var locationName = ViaLocationName.Create("Location Name").Payload;
         var locationCapacity = ViaLocationCapacity.Create(20).Payload;
-        
-        var location = ViaLocation.Create(locationId,locationName,locationCapacity).Payload;
+
+        var location = ViaLocation.Create(locationId, locationName, locationCapacity).Payload;
         viaEvent.SetMaxGuests(maxGuests);
         viaEvent.UpdateTitle(title);
         viaEvent.UpdateDescription(description);
@@ -91,28 +93,29 @@ Assert.True(viaEvent.IsParticipant(guestId));
         viaEvent.MakePublic();
 
         // Act
+        Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
         var result = viaEvent.RemoveParticipant(guestId);
-    
+
         // Assert
         Assert.Contains(result.OperationErrors,
             error => error.Code == ErrorCode.NotFound);
         Assert.False(result.IsSuccess);
         Assert.False(viaEvent.IsParticipant(guestId));
     }
-    
+
     [Fact]
     public void Guest_Removal_Fails_For_Ongoing_Event()
     {
         // Arrange
         var eventId = ViaEventId.Create().Payload;
-        var guestId =  ViaGuestId.Create().Payload;
+        var guestId = ViaGuestId.Create().Payload;
         var email = "john@via.dk";
         var emailCheckerMock = new Mock<ICheckEmailInUse>();
-        
+
         // Setting the event's start time to be in the past, making it "ongoing"
         var startTime = new DateTime(2022, 08, 25, 10, 00, 00);
         var endTime = startTime.AddDays(1);
-        var dateTimeRange = ViaDateTimeRange.Create(startTime, endTime).Payload; 
+        var dateTimeRange = ViaDateTimeRange.Create(startTime, endTime).Payload;
 
         var viaEvent = ViaEvent.Create(
             eventId
@@ -128,21 +131,16 @@ Assert.True(viaEvent.IsParticipant(guestId));
         var locationId = ViaLocationId.Create().Payload;
         var locationName = ViaLocationName.Create("Location Name").Payload;
         var locationCapacity = ViaLocationCapacity.Create(20).Payload;
-        
-        var location = ViaLocation.Create(locationId,locationName,locationCapacity).Payload;
+
+        var location = ViaLocation.Create(locationId, locationName, locationCapacity).Payload;
         viaEvent.SetMaxGuests(maxGuests);
         viaEvent.UpdateTitle(title);
         viaEvent.UpdateDescription(description);
         viaEvent.MakePublic();
-        
-        var time=viaEvent.UpdateDateTimeRange(dateTimeRange);
-        Assert.Equal(time.OperationErrors, new List<OperationError>());
-       var addParticipant= viaEvent.AddParticipant(guestId);
-Assert.True(addParticipant.IsFailure);
-      
- 
-        
-       
 
+        var time = viaEvent.UpdateDateTimeRange(dateTimeRange);
+        Assert.Equal(time.OperationErrors, new List<OperationError>());
+        var addParticipant = viaEvent.AddParticipant(guestId);
+        Assert.True(addParticipant.IsFailure);
     }
 }
