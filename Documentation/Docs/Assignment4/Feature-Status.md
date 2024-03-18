@@ -128,12 +128,12 @@
     * [X] F2
 
 
-* [ ] UC14 - Guest Accepts Invitation
-    * [ ] S1
-    * [ ] F1
-    * [ ] F2
-    * [ ] F3
-    * [ ] F4
+* [X] UC14 - Guest Accepts Invitation
+    * [X] S1
+    * [X] F1
+    * [X] F2
+    * [X] F3
+    * [X] F4
 
 
 * [ ] UC15 - Guest Declines Invitation

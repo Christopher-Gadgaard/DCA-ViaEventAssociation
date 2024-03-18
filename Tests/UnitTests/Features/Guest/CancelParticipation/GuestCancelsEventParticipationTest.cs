@@ -46,8 +46,6 @@ public class GuestCancelsEventParticipationTest
         viaEvent.SetMaxGuests(maxGuests);
         viaEvent.UpdateTitle(title);
         viaEvent.UpdateDescription(description);
-        viaEvent.MakePublic();
-        viaEvent.UpdateStatus(ViaEventStatus.Active);
         viaEvent.UpdateStatus(ViaEventStatus.Active);
         viaEvent.MakePublic();
 
@@ -88,7 +86,6 @@ Assert.True(viaEvent.IsParticipant(guestId));
         viaEvent.SetMaxGuests(maxGuests);
         viaEvent.UpdateTitle(title);
         viaEvent.UpdateDescription(description);
-        viaEvent.MakePublic();
         viaEvent.UpdateStatus(ViaEventStatus.Active);
         viaEvent.UpdateStatus(ViaEventStatus.Active);
         viaEvent.MakePublic();
